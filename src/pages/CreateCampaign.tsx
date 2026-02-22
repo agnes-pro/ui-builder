@@ -211,7 +211,7 @@ export default function CreateCampaign() {
         )}
 
         {/* Step Indicator */}
-        <div className="mt-8 flex items-center gap-2">
+        <div className="mt-6 flex items-center gap-2">
           {steps.map((s, i) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-all ${
