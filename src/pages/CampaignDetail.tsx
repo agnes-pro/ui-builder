@@ -93,7 +93,7 @@ export default function CampaignDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
-      <div className="container relative -mt-20 pb-20 animate-fade-in-up">
+      <div className="container relative -mt-20 pb-20">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
 
         {/* Back */}
