@@ -27,8 +27,10 @@ const navLinks = [
 export default function Navbar({ scrolled }: { scrolled?: boolean }) {
   const { wallet, disconnectWallet } = useWallet();
   const [connectOpen, setConnectOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const location = useLocation();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   const copyAddress = async () => {
     if (wallet.address) {
