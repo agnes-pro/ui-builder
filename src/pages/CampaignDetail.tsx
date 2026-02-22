@@ -269,13 +269,13 @@ export default function CampaignDetail() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-lg bg-secondary p-3 text-center">
-                    <Users className="mx-auto h-5 w-5 text-muted-foreground" />
+                  <div className="rounded-lg bg-secondary p-2.5 text-center">
+                    <Users className="mx-auto h-4 w-4 text-muted-foreground" />
                     <p className="mt-1 font-semibold text-foreground">{campaign.backerCount}</p>
                     <p className="text-xs text-muted-foreground">Backers</p>
                   </div>
-                  <div className="rounded-lg bg-secondary p-3 text-center">
-                    <Clock className="mx-auto h-5 w-5 text-muted-foreground" />
+                  <div className="rounded-lg bg-secondary p-2.5 text-center">
+                    <Clock className="mx-auto h-4 w-4 text-muted-foreground" />
                     <p className="mt-1 font-semibold text-foreground">{daysLeft}</p>
                     <p className="text-xs text-muted-foreground">Days Left</p>
                   </div>
