@@ -253,7 +253,7 @@ export default function CreateCampaign() {
                     placeholder="Describe your project, goals, and how funds will be used..."
                     value={description}
                     onChange={(e) => { setDescription(e.target.value); setErrors((er) => ({ ...er, description: "" })); }}
-                    rows={6}
+                    rows={4}
                     className={`flex w-full rounded-md border bg-secondary px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.description ? "border-destructive" : "border-border"}`}
                     aria-invalid={!!errors.description}
                   />
