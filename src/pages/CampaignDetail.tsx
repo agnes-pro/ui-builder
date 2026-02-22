@@ -131,7 +131,7 @@ export default function CampaignDetail() {
             Created {campaign.createdAt.toLocaleDateString()}
           </span>
         </div>
-        <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{campaign.title}</h1>
+        <h1 className="mt-3 font-display text-2xl font-bold md:text-3xl">{campaign.title}</h1>
         <p className="mt-2 font-mono text-sm text-muted-foreground">
           by {truncateAddress(campaign.creator)}
           <button onClick={copyCreatorAddress} className="ml-2 text-primary hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="Copy creator address">
