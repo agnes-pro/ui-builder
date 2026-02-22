@@ -357,7 +357,7 @@ export default function CreateCampaign() {
 
             {/* Step 3: Milestones */}
             {step === 2 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-foreground">Define Milestones</p>
