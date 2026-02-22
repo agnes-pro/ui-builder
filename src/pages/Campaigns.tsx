@@ -158,6 +158,32 @@ export default function Campaigns() {
           </div>
         </div>
 
+        {/* Category Filter */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {CAMPAIGN_CATEGORIES.map((cat) => {
+            const active = categoryFilter.includes(cat.value);
+            return (
+              <Button
+                key={cat.value}
+                variant={active ? "secondary" : "outline"}
+                size="sm"
+                className="h-8 text-xs"
+                onClick={() =>
+                  setCategoryFilter((prev) =>
+                    active ? prev.filter((c) => c !== cat.value) : [...prev, cat.value]
+                  )
+                }
+              >
+                {cat.label}
+              </Button>
+            );
+          })}
+          {categoryFilter.length > 0 && (
+            <Button variant="ghost" size="sm" className="h-8 text-xs text-muted-foreground" onClick={() => setCategoryFilter([])}>
+              Clear
+            </Button>
+          )}
+        </div>
         {/* Results */}
         {isLoading ? (
           <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
