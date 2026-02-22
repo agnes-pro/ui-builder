@@ -145,7 +145,7 @@ export default function CampaignDetail() {
           <div className="space-y-8">
             {/* Description */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-4">About this Campaign</h2>
+              <h2 className="font-display text-lg font-semibold mb-4">About this Campaign</h2>
               <div className="prose prose-invert max-w-none text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {campaign.description}
               </div>
