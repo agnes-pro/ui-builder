@@ -1,150 +1,243 @@
 
 
-# Implement Remaining PRD Features (Non-Blockchain)
+# Production-Grade UI/UX Hardening Plan
 
-This plan covers all the remaining UI/UX, polish, and accessibility features from the PRD, excluding real blockchain/wallet integration which you'll handle separately.
-
----
-
-## 1. Hero Section Enhancements
-
-**File: `src/pages/Index.tsx`**
-
-- Add an overline tag above the heading: "Powered by Stacks + Bitcoin" with a small icon
-- Add an animated scroll indicator (chevron bouncing down) at the bottom of the hero section
-- Add subtle floating particle/dot animation in the hero background using framer-motion (several small glowing dots that drift slowly)
+This plan addresses the gaps between the current MVP and a production/enterprise-grade frontend. It does NOT cover blockchain integration (you're handling that), but focuses on robustness, polish, and real-world readiness.
 
 ---
 
-## 2. Dynamic Progress Bar Color Gradients
+## Gap Analysis Summary
 
-**Files: `src/components/CampaignCard.tsx`, `src/pages/CampaignDetail.tsx`, `src/components/ContributeModal.tsx`**
-
-- Progress bars currently always use `gradient-orange`
-- Add dynamic color logic based on funding percentage:
-  - 0-33%: orange gradient (current)
-  - 34-66%: orange-to-amber gradient
-  - 67-99%: amber-to-green gradient
-  - 100%: solid green (success)
-- Extract a shared utility `getProgressColor(percentage: number)` into `src/lib/utils.ts`
-- Add corresponding CSS gradient classes in `src/index.css`
-
----
-
-## 3. Enhanced Campaign Detail Page
-
-**File: `src/pages/CampaignDetail.tsx`**
-
-Add three new sections to the left column:
-
-### About the Creator
-- Show creator address with a generated avatar (initials-based, like the Profile page)
-- Display a mock "Member since" date and campaign count
-- Link to view on explorer
-
-### Campaign Updates (Mock)
-- Add a mock updates section with 2-3 hardcoded update entries
-- Each update shows a date, title, and short text
-- Add an "Updates" type to mockData if needed
-
-### View All Backers Modal
-- Add a "View All" link next to the "Recent Backers" heading
-- Opens a Dialog/Sheet listing all contributions for the campaign
-- Scrollable list with address, amount, and date
+| Area | Current State | Production Expectation |
+|------|---------------|----------------------|
+| Error handling | Global ErrorBoundary only | Per-component error states, network error handling, retry logic |
+| Form validation | Basic client-side | Zod schema validation, debounced inputs, accessibility errors |
+| Loading states | Skeleton loaders present | Optimistic updates, loading buttons, disabled states during actions |
+| SEO/Meta | Document title only | Open Graph tags, meta descriptions, structured data |
+| Performance | No optimization | Lazy-loaded routes, image optimization, memoization |
+| Testing | Single example test | Unit tests for utilities, component tests, integration tests |
+| State management | Local state + mock data | Proper data fetching patterns (React Query ready but unused) |
+| Responsive polish | Basic responsive | Tablet breakpoints, touch targets, safe areas |
+| Toast/notification | Basic toasts | Persistent error notifications, action toasts with undo |
+| Footer/Legal | Minimal footer | Terms, Privacy, proper external links |
+| Security | None | CSP headers, input sanitization, XSS protection |
+| Keyboard navigation | Partial | Full keyboard flow for modals, dropdowns, forms |
+| Empty/edge states | Some covered | All pages handle zero-data, error, offline states |
 
 ---
 
-## 4. Image Upload in Create Campaign
+## 1. Route-Level Code Splitting and Lazy Loading
+
+**File: `src/App.tsx`**
+
+- Wrap each page import with `React.lazy()` and `Suspense`
+- Add a global loading fallback (branded spinner or skeleton)
+- This reduces initial bundle size significantly
+
+---
+
+## 2. React Query Integration for Data Fetching
+
+**Files: `src/hooks/useCampaigns.ts` (new), `src/hooks/useCampaign.ts` (new)**
+
+- Replace direct mock data imports with React Query hooks
+- Add proper `isLoading`, `isError`, `refetch` states
+- This prepares the data layer for when real API/blockchain calls replace mocks
+- Remove `setTimeout` loading simulation from pages
+
+---
+
+## 3. Comprehensive Form Validation with Zod
 
 **File: `src/pages/CreateCampaign.tsx`**
 
-- Make the banner image dropzone functional (currently just a placeholder div)
-- Accept image files via click or drag-and-drop
-- Show a preview of the selected image replacing the dropzone
-- Add a "Remove" button to clear the selection
-- Store the file in local state (no actual upload -- just preview via `URL.createObjectURL`)
-
----
-
-## 5. USD Equivalent Display in ContributeModal
+- Replace manual validation logic with Zod schemas + react-hook-form
+- Add proper field-level error messages with `aria-describedby`
+- Debounce title uniqueness check (placeholder for future API)
+- Add character count limits with visual feedback
+- Validate image file size and dimensions
 
 **File: `src/components/ContributeModal.tsx`**
 
-- Add a USD equivalent line below the amount input (like CreateCampaign already does)
-- Use a hardcoded mock rate (e.g., 1 STX = $0.45)
-- Show "~$X.XX USD" as the user types
+- Add Zod schema for contribution amount validation
+- Add min/max amount constraints
 
 ---
 
-## 6. Enhanced 404 Page
+## 4. SEO and Meta Tags
 
-**File: `src/pages/NotFound.tsx`**
+**File: `src/components/SEOHead.tsx` (new)**
 
-- Add an animated illustration (a floating Bitcoin icon with `framer-motion`)
-- Add suggested campaign links (show 3 random active campaigns from mock data)
-- Add a search-like prompt: "Looking for a campaign? Try browsing all campaigns."
-
----
-
-## 7. Skip Link and Accessibility (a11y)
-
-**File: `src/components/Layout.tsx`**
-
-- Add a visually-hidden skip link at the top: "Skip to main content" that focuses `main`
-- The link becomes visible on focus (keyboard navigation)
-
-**File: `src/pages/CampaignDetail.tsx`**
-
-- Add `aria-live="polite"` region for the transaction status updates
-- Add `role="progressbar"` with `aria-valuenow`/`aria-valuemin`/`aria-valuemax` on progress bars
-
-**Files: various pages**
-
-- Ensure all interactive elements have visible focus rings (already mostly done)
+- Create a reusable component that sets `document.title`, `meta description`, and Open Graph tags
+- Use `react-helmet-async` or manual DOM manipulation
+- Apply to all pages with page-specific content
 
 ---
 
-## 8. Scroll-Triggered Section Animations on Landing Page
+## 5. Enhanced Error States and Network Handling
+
+**File: `src/components/ErrorState.tsx` (new)**
+
+- Create a reusable error state component with retry button
+- Variants: full-page, inline card, toast
+
+**File: `src/components/EmptyState.tsx` (new)**
+
+- Create a reusable empty state component with icon, title, description, and CTA
+- Replace ad-hoc empty states across pages
+
+**File: `src/pages/Profile.tsx`, `src/pages/Campaigns.tsx`, `src/pages/CampaignDetail.tsx`**
+
+- Add error handling for data fetch failures
+- Add offline detection with banner
+
+---
+
+## 6. Button Loading and Disabled States
+
+**Files: `src/pages/CreateCampaign.tsx`, `src/components/ContributeModal.tsx`**
+
+- Add loading spinner to "Launch Campaign" and "Contribute" buttons during submission
+- Disable buttons and show spinner while transaction is processing
+- Add success checkmark animation briefly before modal closes
+
+---
+
+## 7. Image Optimization
+
+**File: `src/components/ImageWithFallback.tsx`**
+
+- Add `loading="lazy"` (already on CampaignCard but not on detail page)
+- Add `srcSet` support for responsive images
+- Add blur placeholder while loading (shimmer effect)
+- Constrain image upload to max 5MB with validation message
+
+---
+
+## 8. Keyboard Navigation Audit
+
+**Files: Multiple components**
+
+- Ensure all modals trap focus correctly (Radix does this, but verify)
+- Add `Escape` key handler for custom overlays
+- Ensure campaign card share button is keyboard-accessible (already has `focus-visible`)
+- Add `aria-expanded` to dropdown triggers
+- Test full tab-through flow on all pages
+
+---
+
+## 9. Toast Improvements
+
+**File: `src/hooks/use-toast.ts`**
+
+- Add persistent error toasts that don't auto-dismiss
+- Add action toasts (e.g., "Undo" after disconnect)
+- Add variant styling: success (green), error (red), info (blue)
+
+---
+
+## 10. Responsive Polish
+
+**Files: Various pages**
+
+- Audit tablet viewport (768px-1024px) for layout issues
+- Ensure touch targets are minimum 44x44px
+- Add `safe-area-inset` padding for notched devices
+- Test campaign detail sidebar on tablet (currently `lg:grid-cols-[1fr_380px]` may collapse awkwardly)
+
+---
+
+## 11. Performance Optimizations
+
+**Files: Various**
+
+- Memoize filtered/sorted campaign lists with `useMemo` (already done in Campaigns.tsx)
+- Add `React.memo` to `CampaignCard` to prevent unnecessary re-renders in lists
+- Debounce search input in Campaigns page (currently filters on every keystroke)
+- Use `useCallback` for event handlers passed as props
+
+---
+
+## 12. Unit Tests for Utilities and Key Components
+
+**Files: `src/test/utils.test.ts` (new), `src/test/CampaignCard.test.tsx` (new)**
+
+- Test `getProgressColor`, `formatSTX`, `truncateAddress`, `getDaysLeft`, `getProgressPercentage`
+- Test `CampaignCard` renders correctly with different campaign statuses
+- Test `ContributeModal` validation logic
+- Test `CreateCampaign` step navigation and validation
+
+---
+
+## 13. Footer Enhancement
 
 **File: `src/pages/Index.tsx`**
 
-- Wrap "How It Works", "Featured Campaigns", and "Trust Indicators" sections in `motion.div` with `whileInView` fade-in-up animations
-- Use `viewport={{ once: true }}` to only trigger once
-- Stagger children within each section
+- Add Terms of Service and Privacy Policy placeholder links
+- Add proper `rel="noopener noreferrer"` on all external links (partially done)
+- Extract Footer into its own component for reuse on other pages
 
 ---
 
-## 9. Campaign Card Quick Actions
+## 14. Consistent Page Structure Component
 
-**File: `src/components/CampaignCard.tsx`**
+**File: `src/components/PageHeader.tsx` (new)**
 
-- Add a subtle share button that appears on hover (top-right corner of the card image)
-- Small icon button with `Share2` icon
-- On click, copies the campaign URL to clipboard and shows a toast (stops event propagation so it doesn't navigate)
+- Extract the repeated pattern of breadcrumbs + title + description into a reusable component
+- Ensures consistent spacing and typography across all pages
 
 ---
 
-## Summary of Files Changed
+## Summary of Changes
 
+### New Files
+| File | Purpose |
+|------|---------|
+| `src/hooks/useCampaigns.ts` | React Query hook for campaign list |
+| `src/hooks/useCampaign.ts` | React Query hook for single campaign |
+| `src/components/SEOHead.tsx` | Reusable meta tags component |
+| `src/components/ErrorState.tsx` | Reusable error UI |
+| `src/components/EmptyState.tsx` | Reusable empty state UI |
+| `src/components/PageHeader.tsx` | Reusable page header |
+| `src/components/Footer.tsx` | Extracted footer component |
+| `src/test/utils.test.ts` | Utility function tests |
+| `src/test/CampaignCard.test.tsx` | Component tests |
+
+### Modified Files
 | File | Changes |
 |------|---------|
-| `src/pages/Index.tsx` | Hero overline, scroll indicator, floating particles, scroll-triggered section animations |
-| `src/pages/NotFound.tsx` | Animated illustration, suggested campaigns |
-| `src/pages/CampaignDetail.tsx` | About Creator section, Updates section, View All Backers modal, a11y progress bars |
-| `src/pages/CreateCampaign.tsx` | Functional image upload with preview |
-| `src/components/CampaignCard.tsx` | Share quick-action on hover |
-| `src/components/ContributeModal.tsx` | USD equivalent display |
-| `src/components/Layout.tsx` | Skip-to-content link |
-| `src/lib/utils.ts` | `getProgressColor()` utility |
-| `src/index.css` | New gradient classes for progress bar colors |
-| `src/data/mockData.ts` | Mock updates data for campaign detail |
+| `src/App.tsx` | Lazy loading routes, Suspense fallback |
+| `src/pages/CreateCampaign.tsx` | Zod validation, loading states, image validation |
+| `src/pages/Campaigns.tsx` | React Query, debounced search, error states |
+| `src/pages/CampaignDetail.tsx` | React Query, error states, image lazy loading |
+| `src/pages/Profile.tsx` | Error states, empty states |
+| `src/pages/Index.tsx` | Extract footer, SEO head |
+| `src/components/ContributeModal.tsx` | Zod validation, loading button |
+| `src/components/ImageWithFallback.tsx` | Shimmer placeholder, srcSet |
+| `src/components/CampaignCard.tsx` | React.memo wrapper |
+| `src/index.css` | Safe area insets, shimmer animation |
+
+---
+
+## Priority Order
+
+1. **Route lazy loading** -- immediate bundle size improvement
+2. **React Query hooks** -- proper data layer foundation
+3. **Zod form validation** -- user-facing quality
+4. **Error/empty states** -- robustness
+5. **Button loading states** -- interaction feedback
+6. **SEO meta tags** -- discoverability
+7. **Performance optimizations** -- scalability
+8. **Tests** -- maintainability
+9. **Responsive polish** -- device coverage
+10. **Footer/legal** -- compliance
 
 ---
 
 ## Technical Notes
 
-- All animations will respect `prefers-reduced-motion` via conditional variants or CSS media query (already in place)
-- No new dependencies needed -- everything uses existing framer-motion, lucide-react, and shadcn/ui components
-- Mock STX-to-USD rate will be a constant (`STX_USD_RATE = 0.45`) in `src/lib/utils.ts` for easy replacement later with a real API
-- Image upload is client-side only (blob URL preview) -- real upload can be wired in during blockchain integration
+- No new major dependencies needed; Zod and React Query are already installed
+- React Query is already configured in App.tsx but not used by any page
+- All changes are backward-compatible with the future blockchain integration
+- Tests use the existing vitest setup (already configured)
 
