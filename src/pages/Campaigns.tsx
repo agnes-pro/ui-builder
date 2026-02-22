@@ -114,7 +114,7 @@ export default function Campaigns() {
         </PageHeader>
 
         {/* Filters */}
-        <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
