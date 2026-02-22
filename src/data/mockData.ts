@@ -18,6 +18,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-12-01"),
     endsAt: new Date("2026-03-15"),
     imageUrl: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=450&fit=crop",
+    category: "infrastructure",
   },
   {
     id: 2,
