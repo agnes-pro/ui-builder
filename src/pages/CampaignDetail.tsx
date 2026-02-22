@@ -327,13 +327,19 @@ export default function CampaignDetail() {
 
             {/* Your Contribution */}
             {wallet.connected && (
+              {(() => {
+                const myContrib = mockContributions.filter(c => c.backer === wallet.address && c.campaignId === campaign.id);
+                const totalContrib = myContrib.reduce((sum, c) => sum + c.amount, 0);
+                const latestContrib = myContrib[0];
+                if (totalContrib === 0) return null;
+                return (
               <Card className="border-primary/20 bg-card">
                 <CardHeader className="pb-3">
                   <CardTitle className="font-display text-base">Your Contribution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="font-display text-2xl font-bold text-primary">500 STX</p>
-                  <p className="text-xs text-muted-foreground mt-1">Contributed on Feb 20, 2026</p>
+                  <p className="font-display text-2xl font-bold text-primary">{formatSTX(totalContrib)} STX</p>
+                  <p className="text-xs text-muted-foreground mt-1">Contributed on {latestContrib?.timestamp.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                   {campaign.status === "failed" && (
                     <Button variant="outline" size="sm" className="mt-4 w-full border-destructive text-destructive hover:bg-destructive/10">
                       Claim Refund
