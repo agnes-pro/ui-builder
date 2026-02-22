@@ -211,7 +211,7 @@ export default function Index() {
       >
         <div className="container">
           <div className="text-center">
-            <h2 className="font-display text-3xl font-bold md:text-4xl">How It Works</h2>
+            <h2 className="font-display text-2xl font-bold md:text-3xl">How It Works</h2>
             <p className="mt-2 text-muted-foreground">Three simple steps to fund or create a campaign</p>
           </div>
           <motion.div
