@@ -13,6 +13,7 @@ import CampaignDetailSkeleton from "@/components/skeletons/CampaignDetailSkeleto
 import ImageWithFallback from "@/components/ImageWithFallback";
 import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, Share2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import PageTransition from "@/components/PageTransition";
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success border-success/30",
