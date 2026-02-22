@@ -159,7 +159,7 @@ export default function Index() {
               Powered by Stacks + Bitcoin
             </div>
 
-            <h1 className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight md:text-7xl">
+            <h1 className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl">
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
             </h1>
@@ -172,7 +172,7 @@ export default function Index() {
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 border-white/20 text-white text-base hover:bg-white/10 active:scale-[0.98] transition-transform">
+              <Button asChild variant="outline" size="lg" className="h-12 border-white/20 !text-white text-base hover:bg-white/10 active:scale-[0.98] transition-transform">
                 <Link to="/create">Create Campaign</Link>
               </Button>
             </div>
