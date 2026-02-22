@@ -241,11 +241,11 @@ export default function Index() {
             </h2>
           </div>
           <motion.div
-            className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.05 }}
           >
             {trustIndicators.map((item) => (
               <motion.div
