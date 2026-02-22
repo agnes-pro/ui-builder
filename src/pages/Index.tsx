@@ -276,7 +276,7 @@ export default function Index() {
 
       {/* Trust Indicators */}
       <motion.section
-        className="py-16 bg-background"
+        className="py-12 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
