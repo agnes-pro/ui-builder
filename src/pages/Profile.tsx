@@ -99,7 +99,7 @@ export default function Profile() {
                 <ExternalLink className="h-3 w-3" /> Explorer
               </a>
             </div>
-            <p className="mt-3 font-mono text-lg font-semibold text-foreground">
+            <p className="mt-3 font-mono text-base font-semibold text-foreground">
               {formatSTX(wallet.balance)} <span className="text-muted-foreground text-sm font-normal">STX</span>
             </p>
           </div>
