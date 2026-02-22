@@ -80,8 +80,13 @@ export default function ContributeModal({ open, onOpenChange, campaign, onContri
             {error && (
               <p id="contribute-error" className="mt-1 text-xs text-destructive">{error}</p>
             )}
-            {wallet.connected && !error && (
+            {!error && Number(amount) > 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
+                ≈ ${(Number(amount) * STX_USD_RATE).toFixed(2)} USD
+              </p>
+            )}
+            {wallet.connected && !error && (
+              <p className="mt-1 text-xs text-muted-foreground">
                 Balance: <span className="font-mono text-foreground">{formatSTX(wallet.balance)} STX</span>
               </p>
             )}
