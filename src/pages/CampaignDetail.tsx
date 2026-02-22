@@ -85,6 +85,7 @@ export default function CampaignDetail() {
   const completedMilestones = campaign.milestones.filter((m) => m.completed).length;
 
   return (
+    <PageTransition>
     <Layout>
       {/* Banner */}
       <div className="relative h-64 w-full overflow-hidden md:h-80">
