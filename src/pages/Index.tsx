@@ -154,7 +154,7 @@ export default function Index() {
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <div className="animate-fade-in-up mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
+            <div className="animate-fade-in-up mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white/60">
               <Zap className="h-3 w-3 text-primary" />
               Powered by Stacks + Bitcoin
             </div>
@@ -163,7 +163,7 @@ export default function Index() {
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
             </h1>
-            <p className="mt-4 animate-fade-in-up text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "0.15s" }}>
+            <p className="mt-4 animate-fade-in-up text-lg text-white/60 md:text-xl" style={{ animationDelay: "0.15s" }}>
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
@@ -172,7 +172,7 @@ export default function Index() {
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 border-border text-base hover:bg-secondary active:scale-[0.98] transition-transform">
+              <Button asChild variant="outline" size="lg" className="h-12 border-white/20 text-white text-base hover:bg-white/10 active:scale-[0.98] transition-transform">
                 <Link to="/create">Create Campaign</Link>
               </Button>
             </div>
@@ -181,10 +181,10 @@ export default function Index() {
             <div className="mt-12 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="font-display text-3xl font-bold text-foreground md:text-4xl">
+                  <div className="font-display text-3xl font-bold text-white md:text-4xl">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="mt-1 text-sm text-white/60">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -192,7 +192,7 @@ export default function Index() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/50"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
