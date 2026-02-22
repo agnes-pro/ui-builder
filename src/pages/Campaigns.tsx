@@ -93,7 +93,7 @@ export default function Campaigns() {
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [debouncedSearch, statusFilter, sortBy]);
+  }, [debouncedSearch, statusFilter, sortBy, categoryFilter]);
 
   return (
     <PageTransition>
