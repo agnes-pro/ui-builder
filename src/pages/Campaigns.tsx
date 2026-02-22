@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
@@ -14,7 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
-import { useEffect, useRef } from "react";
+import { CampaignCategory } from "@/types/campaign";
+import { CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 
 const containerVariants = {
   hidden: {},
