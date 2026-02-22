@@ -222,14 +222,14 @@ export default function Index() {
             viewport={{ once: true, amount: 0.2 }}
           >
             {howItWorks.map((step, i) => (
-              <motion.div key={step.title} variants={childVariants} className="group relative rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-                  <step.icon className="h-7 w-7 text-primary" />
+              <motion.div key={step.title} variants={childVariants} className="group relative rounded-xl border border-border bg-card p-5 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+                  <step.icon className="h-6 w-6 text-primary" />
                 </div>
                 <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                   Step {i + 1}
                 </div>
-                <h3 className="font-display text-xl font-semibold">{step.title}</h3>
+                <h3 className="font-display text-lg font-semibold">{step.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
               </motion.div>
             ))}
