@@ -1,9 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { mockCampaigns, mockContributions, truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
+import { mockCampaigns, mockContributions, mockUpdates, truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
+import { getProgressColor } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useWallet } from "@/contexts/WalletContext";
 import { useState, useEffect } from "react";
 import ContributeModal from "@/components/ContributeModal";
@@ -11,7 +14,7 @@ import TransactionStatusModal, { TransactionStatus } from "@/components/Transact
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CampaignDetailSkeleton from "@/components/skeletons/CampaignDetailSkeleton";
 import ImageWithFallback from "@/components/ImageWithFallback";
-import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, Share2, Users } from "lucide-react";
+import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, FileText, MessageSquare, Share2, User, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
 
@@ -29,6 +32,7 @@ export default function CampaignDetail() {
   const [txModalOpen, setTxModalOpen] = useState(false);
   const [txStatus, setTxStatus] = useState<TransactionStatus>("signing");
   const [txAmount, setTxAmount] = useState("");
+  const [backersOpen, setBackersOpen] = useState(false);
   const { wallet } = useWallet();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
@@ -51,8 +55,6 @@ export default function CampaignDetail() {
     setContributeOpen(false);
     setTxStatus("signing");
     setTxModalOpen(true);
-
-    // Simulate transaction flow
     setTimeout(() => setTxStatus("broadcasting"), 2000);
     setTimeout(() => setTxStatus("pending"), 4000);
     setTimeout(() => setTxStatus("success"), 6000);
@@ -82,7 +84,9 @@ export default function CampaignDetail() {
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
   const contributions = mockContributions.filter((c) => c.campaignId === campaign.id);
+  const updates = mockUpdates.filter((u) => u.campaignId === campaign.id);
   const completedMilestones = campaign.milestones.filter((m) => m.completed).length;
+  const creatorInitials = campaign.creator.slice(0, 2).toUpperCase();
 
   return (
     <PageTransition>
@@ -96,12 +100,10 @@ export default function CampaignDetail() {
       <div className="container relative -mt-20 pb-20">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
 
-        {/* Back */}
         <Button asChild variant="ghost" size="sm" className="mb-4 gap-1 text-muted-foreground">
           <Link to="/campaigns"><ArrowLeft className="h-4 w-4" /> All Campaigns</Link>
         </Button>
 
-        {/* Header */}
         <div className="flex flex-wrap items-start gap-3">
           <Badge className={`${statusColors[campaign.status]} border capitalize`}>{campaign.status}</Badge>
           <span className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -126,6 +128,26 @@ export default function CampaignDetail() {
               <h2 className="font-display text-xl font-semibold mb-4">About this Campaign</h2>
               <div className="prose prose-invert max-w-none text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {campaign.description}
+              </div>
+            </section>
+
+            {/* About the Creator */}
+            <section>
+              <h2 className="font-display text-xl font-semibold mb-4">About the Creator</h2>
+              <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 font-display font-bold text-primary">
+                  {creatorInitials}
+                </div>
+                <div className="flex-1">
+                  <p className="font-mono text-sm text-foreground">{truncateAddress(campaign.creator)}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1"><User className="h-3 w-3" /> Member since {campaign.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span>
+                    <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> 3 campaigns</span>
+                  </div>
+                  <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                    <ExternalLink className="h-3 w-3" /> View on Explorer
+                  </a>
+                </div>
               </div>
             </section>
 
@@ -154,14 +176,42 @@ export default function CampaignDetail() {
               </div>
             </section>
 
+            {/* Campaign Updates */}
+            {updates.length > 0 && (
+              <section>
+                <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" /> Updates
+                </h2>
+                <div className="space-y-4">
+                  {updates.map((update) => (
+                    <div key={update.id} className="rounded-xl border border-border bg-card p-5">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                        <Calendar className="h-3 w-3" />
+                        {update.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                      </div>
+                      <h4 className="font-semibold text-foreground">{update.title}</h4>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{update.content}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Recent Backers */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-4">Recent Backers</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-display text-xl font-semibold">Recent Backers</h2>
+                {contributions.length > 0 && (
+                  <button onClick={() => setBackersOpen(true)} className="text-xs text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring rounded">
+                    View All
+                  </button>
+                )}
+              </div>
               {contributions.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No contributions yet. Be the first!</p>
               ) : (
                 <div className="space-y-3">
-                  {contributions.map((c) => (
+                  {contributions.slice(0, 5).map((c) => (
                     <div key={c.id} className="flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
                       <div>
                         <p className="font-mono text-sm text-foreground">{truncateAddress(c.backer)}</p>
@@ -185,8 +235,15 @@ export default function CampaignDetail() {
                     <span className="font-display text-3xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
                     <span className="text-sm text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
                   </div>
-                  <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-secondary">
-                    <div className="h-full rounded-full gradient-orange transition-all duration-1000 ease-out" style={{ width: `${progress}%` }} />
+                  <div
+                    className="mt-3 h-3 w-full overflow-hidden rounded-full bg-secondary"
+                    role="progressbar"
+                    aria-valuenow={progress}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${progress}% funded`}
+                  >
+                    <div className={`h-full rounded-full ${getProgressColor(progress)} transition-all duration-1000 ease-out`} style={{ width: `${progress}%` }} />
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{progress}% funded</p>
                 </div>
@@ -268,6 +325,36 @@ export default function CampaignDetail() {
           </div>
         </div>
       </div>
+
+      {/* Transaction status aria-live region */}
+      <div aria-live="polite" className="sr-only">
+        {txModalOpen && `Transaction status: ${txStatus}`}
+      </div>
+
+      {/* View All Backers Modal */}
+      <Dialog open={backersOpen} onOpenChange={setBackersOpen}>
+        <DialogContent className="border-border bg-card sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">All Backers</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="max-h-[400px]">
+            <div className="space-y-3 pr-4">
+              {contributions.map((c) => (
+                <div key={c.id} className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 p-4">
+                  <div>
+                    <p className="font-mono text-sm text-foreground">{truncateAddress(c.backer)}</p>
+                    <p className="text-xs text-muted-foreground">{c.timestamp.toLocaleDateString()}</p>
+                  </div>
+                  <span className="font-semibold text-primary">{formatSTX(c.amount)} STX</span>
+                </div>
+              ))}
+              {contributions.length === 0 && (
+                <p className="py-8 text-center text-sm text-muted-foreground">No contributions yet.</p>
+              )}
+            </div>
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
 
       <ContributeModal open={contributeOpen} onOpenChange={setContributeOpen} campaign={campaign} onContribute={handleContribute} />
       <TransactionStatusModal

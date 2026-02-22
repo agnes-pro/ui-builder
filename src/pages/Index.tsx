@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
 import { mockCampaigns, formatSTX } from "@/data/mockData";
-import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle, Github, Twitter } from "lucide-react";
+import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle, Github, Twitter, ChevronDown, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import PageTransition from "@/components/PageTransition";
 
@@ -13,13 +13,27 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+const sectionVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
 
   useEffect(() => {
-    // Respect reduced motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
       setCount(end);
@@ -55,6 +69,31 @@ function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string })
     <span ref={ref}>
       {count.toLocaleString()}{suffix}
     </span>
+  );
+}
+
+function FloatingParticles() {
+  const particles = Array.from({ length: 6 }, (_, i) => ({
+    id: i,
+    x: `${15 + i * 15}%`,
+    y: `${20 + (i % 3) * 25}%`,
+    size: 3 + (i % 3) * 2,
+    duration: 6 + i * 1.5,
+    delay: i * 0.8,
+  }));
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-primary/20"
+          style={{ left: p.x, top: p.y, width: p.size, height: p.size }}
+          animate={{ y: [0, -30, 0], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -112,11 +151,18 @@ export default function Index() {
     <Layout>
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[90vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
+        <FloatingParticles />
         <motion.div
           className="container relative z-10 py-20"
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         >
           <div className="mx-auto max-w-3xl text-center">
+            {/* Overline */}
+            <div className="animate-fade-in-up mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
+              <Zap className="h-3 w-3 text-primary" />
+              Powered by Stacks + Bitcoin
+            </div>
+
             <h1 className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight md:text-7xl">
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
@@ -148,18 +194,40 @@ export default function Index() {
             </div>
           </div>
         </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <span className="text-xs">Scroll</span>
+          <ChevronDown className="h-4 w-4" />
+        </motion.div>
       </section>
 
       {/* How It Works */}
-      <section className="py-24 bg-background">
+      <motion.section
+        className="py-24 bg-background"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="container">
           <div className="text-center">
             <h2 className="font-display text-3xl font-bold md:text-4xl">How It Works</h2>
             <p className="mt-3 text-muted-foreground">Three simple steps to fund or create a campaign</p>
           </div>
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
+          <motion.div
+            className="mt-16 grid gap-8 md:grid-cols-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             {howItWorks.map((step, i) => (
-              <div key={step.title} className="group relative rounded-xl border border-border bg-card p-8 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
+              <motion.div key={step.title} variants={childVariants} className="group relative rounded-xl border border-border bg-card p-8 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
                   <step.icon className="h-8 w-8 text-primary" />
                 </div>
@@ -168,14 +236,20 @@ export default function Index() {
                 </div>
                 <h3 className="font-display text-xl font-semibold">{step.title}</h3>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Campaigns */}
-      <section className="py-24 bg-secondary/30">
+      <motion.section
+        className="py-24 bg-secondary/30"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+      >
         <div className="container">
           <div className="flex items-end justify-between">
             <div>
@@ -203,27 +277,39 @@ export default function Index() {
             </Button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Trust Indicators */}
-      <section className="py-24 bg-background">
+      <motion.section
+        className="py-24 bg-background"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="container">
           <h2 className="text-center font-display text-3xl font-bold md:text-4xl">
             Built on <span className="text-gradient-orange">Bitcoin</span> Security
           </h2>
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <motion.div
+            className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             {trustIndicators.map((item) => (
-              <div key={item.title} className="rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
+              <motion.div key={item.title} variants={childVariants} className="rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                   <item.icon className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="font-display text-base font-semibold">{item.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card py-12">

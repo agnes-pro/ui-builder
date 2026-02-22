@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useWallet } from "@/contexts/WalletContext";
 import { Campaign } from "@/types/campaign";
 import { formatSTX, getProgressPercentage } from "@/data/mockData";
+import { STX_USD_RATE, getProgressColor } from "@/lib/utils";
 
 interface Props {
   open: boolean;
@@ -56,7 +57,7 @@ export default function ContributeModal({ open, onOpenChange, campaign, onContri
               <span className="text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-              <div className="h-full rounded-full gradient-orange transition-all duration-700" style={{ width: `${progress}%` }} />
+              <div className={`h-full rounded-full ${getProgressColor(progress)} transition-all duration-700`} style={{ width: `${progress}%` }} />
             </div>
           </div>
 
@@ -79,8 +80,13 @@ export default function ContributeModal({ open, onOpenChange, campaign, onContri
             {error && (
               <p id="contribute-error" className="mt-1 text-xs text-destructive">{error}</p>
             )}
-            {wallet.connected && !error && (
+            {!error && Number(amount) > 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
+                ≈ ${(Number(amount) * STX_USD_RATE).toFixed(2)} USD
+              </p>
+            )}
+            {wallet.connected && !error && (
+              <p className="mt-1 text-xs text-muted-foreground">
                 Balance: <span className="font-mono text-foreground">{formatSTX(wallet.balance)} STX</span>
               </p>
             )}
