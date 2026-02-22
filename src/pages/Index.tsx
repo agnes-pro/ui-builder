@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { mockCampaigns, formatSTX } from "@/data/mockData";
 import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle, Github, Twitter } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import PageTransition from "@/components/PageTransition";
 
 function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [count, setCount] = useState(0);
