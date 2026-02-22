@@ -1,4 +1,5 @@
 export type CampaignStatus = "active" | "funded" | "completed" | "failed";
+export type CampaignCategory = "defi" | "nft" | "infrastructure" | "governance" | "payments" | "social";
 
 export interface Milestone {
   id: number;
@@ -28,6 +29,7 @@ export interface Campaign {
   createdAt: Date;
   endsAt: Date;
   imageUrl: string;
+  category: CampaignCategory;
 }
 
 export interface WalletState {

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
@@ -14,7 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
-import { useEffect, useRef } from "react";
+import { CampaignCategory } from "@/types/campaign";
+import { CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 
 const containerVariants = {
   hidden: {},
@@ -29,6 +30,7 @@ export default function Campaigns() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [categoryFilter, setCategoryFilter] = useState<CampaignCategory[]>([]);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loadingMore, setLoadingMore] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
@@ -59,6 +61,10 @@ export default function Campaigns() {
       result = result.filter((c) => c.status === statusFilter);
     }
 
+    if (categoryFilter.length > 0) {
+      result = result.filter((c) => categoryFilter.includes(c.category));
+    }
+
     switch (sortBy) {
       case "most-funded":
         result.sort((a, b) => b.raisedAmount - a.raisedAmount);
@@ -74,7 +80,7 @@ export default function Campaigns() {
     }
 
     return result;
-  }, [campaigns, debouncedSearch, statusFilter, sortBy]);
+  }, [campaigns, debouncedSearch, statusFilter, sortBy, categoryFilter]);
 
   const handleLoadMore = useCallback(() => {
     setLoadingMore(true);
@@ -87,7 +93,7 @@ export default function Campaigns() {
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [debouncedSearch, statusFilter, sortBy]);
+  }, [debouncedSearch, statusFilter, sortBy, categoryFilter]);
 
   return (
     <PageTransition>
@@ -152,6 +158,32 @@ export default function Campaigns() {
           </div>
         </div>
 
+        {/* Category Filter */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {CAMPAIGN_CATEGORIES.map((cat) => {
+            const active = categoryFilter.includes(cat.value);
+            return (
+              <Button
+                key={cat.value}
+                variant={active ? "secondary" : "outline"}
+                size="sm"
+                className="h-8 text-xs"
+                onClick={() =>
+                  setCategoryFilter((prev) =>
+                    active ? prev.filter((c) => c !== cat.value) : [...prev, cat.value]
+                  )
+                }
+              >
+                {cat.label}
+              </Button>
+            );
+          })}
+          {categoryFilter.length > 0 && (
+            <Button variant="ghost" size="sm" className="h-8 text-xs text-muted-foreground" onClick={() => setCategoryFilter([])}>
+              Clear
+            </Button>
+          )}
+        </div>
         {/* Results */}
         {isLoading ? (
           <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
@@ -176,7 +208,7 @@ export default function Campaigns() {
         ) : (
           <>
             <motion.div
-              key={`${debouncedSearch}-${statusFilter}-${sortBy}`}
+              key={`${debouncedSearch}-${statusFilter}-${sortBy}-${categoryFilter.join()}`}
               className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
               variants={containerVariants}
               initial="hidden"

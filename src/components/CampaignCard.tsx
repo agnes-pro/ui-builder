@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Campaign } from "@/types/campaign";
 import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
 import { getProgressColor } from "@/lib/utils";
+import { categoryColors, CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Share2, Users } from "lucide-react";
 import ImageWithFallback from "@/components/ImageWithFallback";
@@ -71,9 +72,12 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
           fallbackClassName="h-full w-full"
           loading="lazy"
         />
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 flex gap-1.5">
           <Badge className={`${statusColors[campaign.status]} border text-xs capitalize`}>
             {campaign.status}
+          </Badge>
+          <Badge className={`${categoryColors[campaign.category]} border text-xs`}>
+            {CAMPAIGN_CATEGORIES.find(c => c.value === campaign.category)?.label}
           </Badge>
         </div>
         {/* Share button on hover */}

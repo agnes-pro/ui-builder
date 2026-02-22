@@ -18,6 +18,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-12-01"),
     endsAt: new Date("2026-03-15"),
     imageUrl: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=450&fit=crop",
+    category: "infrastructure",
   },
   {
     id: 2,
@@ -37,6 +38,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-10-15"),
     endsAt: new Date("2026-01-15"),
     imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop",
+    category: "defi",
   },
   {
     id: 3,
@@ -55,6 +57,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-06-01"),
     endsAt: new Date("2025-09-01"),
     imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=450&fit=crop",
+    category: "payments",
   },
   {
     id: 4,
@@ -73,6 +76,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2026-01-20"),
     endsAt: new Date("2026-04-20"),
     imageUrl: "https://images.unsplash.com/photo-1634973357973-f2ed2657db3c?w=800&h=450&fit=crop",
+    category: "nft",
   },
   {
     id: 5,
@@ -91,6 +95,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-08-01"),
     endsAt: new Date("2025-11-01"),
     imageUrl: "https://images.unsplash.com/photo-1577415124269-fc1140a69e91?w=800&h=450&fit=crop",
+    category: "governance",
   },
   {
     id: 6,
@@ -110,6 +115,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-11-01"),
     endsAt: new Date("2026-05-01"),
     imageUrl: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=800&h=450&fit=crop",
+    category: "infrastructure",
   },
 ];
 

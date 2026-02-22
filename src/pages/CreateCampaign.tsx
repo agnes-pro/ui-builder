@@ -12,6 +12,8 @@ import TransactionStatusModal, { TransactionStatus } from "@/components/Transact
 import { useWallet } from "@/contexts/WalletContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import PageTransition from "@/components/PageTransition";
+import { CampaignCategory } from "@/types/campaign";
+import { CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 
 const steps = ["Basic Info", "Funding Goal", "Milestones", "Review"];
 
@@ -27,6 +29,7 @@ export default function CreateCampaign() {
   const [goal, setGoal] = useState("");
   const [duration, setDuration] = useState("30");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [category, setCategory] = useState<CampaignCategory | "">("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [milestones, setMilestones] = useState<MilestoneInput[]>([
@@ -95,6 +98,7 @@ export default function CreateCampaign() {
       case 0:
         if (!title.trim()) newErrors.title = "Title is required";
         if (!description.trim()) newErrors.description = "Description is required";
+        if (!category) newErrors.category = "Category is required";
         break;
       case 1:
         if (!goal || Number(goal) <= 0) newErrors.goal = "Enter a valid funding goal";
@@ -112,7 +116,7 @@ export default function CreateCampaign() {
 
   const canNext = () => {
     switch (step) {
-      case 0: return title.length > 0 && description.length > 0;
+      case 0: return title.length > 0 && description.length > 0 && category !== "";
       case 1: return Number(goal) > 0;
       case 2: return totalPercentage === 100 && milestones.every((m) => m.description.length > 0);
       default: return true;
@@ -225,6 +229,20 @@ export default function CreateCampaign() {
                       </div>
                     </div>
                   )}
+                </div>
+                <div>
+                  <Label htmlFor="campaign-category" className="text-sm font-medium text-foreground mb-2 block">Category</Label>
+                  <Select value={category} onValueChange={(v) => { setCategory(v as CampaignCategory); setErrors((er) => ({ ...er, category: "" })); }}>
+                    <SelectTrigger className={`bg-secondary ${errors.category ? "border-destructive" : "border-border"}`} id="campaign-category">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border">
+                      {CAMPAIGN_CATEGORIES.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.category && <p className="mt-1 text-xs text-destructive">{errors.category}</p>}
                 </div>
               </div>
             )}
@@ -342,6 +360,10 @@ export default function CreateCampaign() {
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-widest">Title</p>
                     <p className="font-semibold text-foreground mt-1">{title}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Category</p>
+                    <p className="font-semibold text-foreground mt-1">{CAMPAIGN_CATEGORIES.find(c => c.value === category)?.label}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-widest">Goal</p>
