@@ -102,7 +102,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
         {/* Progress */}
         <div className="mt-auto space-y-2">
           <div
-            className="h-2 w-full overflow-hidden rounded-full bg-secondary"
+            className="h-1.5 w-full overflow-hidden rounded-full bg-secondary"
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin={0}
