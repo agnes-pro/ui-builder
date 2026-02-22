@@ -63,7 +63,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
       {/* Image */}
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden">
         <ImageWithFallback
           src={campaign.imageUrl}
           alt={campaign.title}
