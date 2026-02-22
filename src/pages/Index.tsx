@@ -147,7 +147,7 @@ export default function Index() {
       />
 
       {/* Hero */}
-      <section ref={heroRef} className="relative min-h-[85vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
         <FloatingParticles />
         <motion.div
           className="container relative z-10 py-16"
@@ -159,29 +159,29 @@ export default function Index() {
               Powered by Stacks + Bitcoin
             </div>
 
-            <h1 className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl">
+            <h1 className="animate-fade-in-up font-display text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl">
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
             </h1>
-            <p className="mt-4 animate-fade-in-up text-lg text-white/60 md:text-xl" style={{ animationDelay: "0.15s" }}>
+            <p className="mt-4 animate-fade-in-up text-base text-white/60 md:text-lg" style={{ animationDelay: "0.15s" }}>
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <Button asChild size="lg" className="h-12 gap-2 gradient-orange border-0 text-primary-foreground text-base hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+              <Button asChild size="lg" className="h-10 gap-2 gradient-orange border-0 text-primary-foreground text-sm hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
                 <Link to="/campaigns">
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild size="lg" className="h-12 bg-transparent border border-white/20 text-white text-base hover:bg-white/10 active:scale-[0.98] transition-transform">
+              <Button asChild size="lg" className="h-10 bg-transparent border border-white/20 text-white text-sm hover:bg-white/10 active:scale-[0.98] transition-transform">
                 <Link to="/create">Create Campaign</Link>
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="mt-12 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
+            <div className="mt-8 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="font-display text-3xl font-bold text-white md:text-4xl">
+                  <div className="font-display text-2xl font-bold text-white md:text-3xl">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="mt-1 text-sm text-white/60">{stat.label}</div>
@@ -203,7 +203,7 @@ export default function Index() {
 
       {/* How It Works */}
       <motion.section
-        className="py-16 bg-background"
+        className="py-12 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -211,25 +211,25 @@ export default function Index() {
       >
         <div className="container">
           <div className="text-center">
-            <h2 className="font-display text-3xl font-bold md:text-4xl">How It Works</h2>
+            <h2 className="font-display text-2xl font-bold md:text-3xl">How It Works</h2>
             <p className="mt-2 text-muted-foreground">Three simple steps to fund or create a campaign</p>
           </div>
           <motion.div
-            className="mt-10 grid gap-6 md:grid-cols-3"
+            className="mt-8 grid gap-6 md:grid-cols-3"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
             {howItWorks.map((step, i) => (
-              <motion.div key={step.title} variants={childVariants} className="group relative rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-                  <step.icon className="h-7 w-7 text-primary" />
+              <motion.div key={step.title} variants={childVariants} className="group relative rounded-xl border border-border bg-card p-5 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+                  <step.icon className="h-6 w-6 text-primary" />
                 </div>
                 <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                   Step {i + 1}
                 </div>
-                <h3 className="font-display text-xl font-semibold">{step.title}</h3>
+                <h3 className="font-display text-lg font-semibold">{step.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
               </motion.div>
             ))}
@@ -239,7 +239,7 @@ export default function Index() {
 
       {/* Featured Campaigns */}
       <motion.section
-        className="py-16 bg-secondary/30"
+        className="py-12 bg-secondary/30"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -248,7 +248,7 @@ export default function Index() {
         <div className="container">
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">Featured Campaigns</h2>
+              <h2 className="font-display text-2xl font-bold md:text-3xl">Featured Campaigns</h2>
               <p className="mt-2 text-muted-foreground">Discover projects building on Bitcoin</p>
             </div>
             <Button asChild variant="ghost" className="hidden gap-2 text-primary md:inline-flex">
@@ -276,18 +276,18 @@ export default function Index() {
 
       {/* Trust Indicators */}
       <motion.section
-        className="py-16 bg-background"
+        className="py-12 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
         <div className="container">
-          <h2 className="text-center font-display text-3xl font-bold md:text-4xl">
+          <h2 className="text-center font-display text-2xl font-bold md:text-3xl">
             Built on <span className="text-gradient-orange">Bitcoin</span> Security
           </h2>
           <motion.div
-            className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -295,7 +295,7 @@ export default function Index() {
           >
             {trustIndicators.map((item) => (
               <motion.div key={item.title} variants={childVariants} className="rounded-xl border border-border bg-card p-5 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
                 <h3 className="font-display text-base font-semibold">{item.title}</h3>
