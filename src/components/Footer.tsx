@@ -76,7 +76,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-border pt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-between">
+        <div className="mt-6 border-t border-border pt-4 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-between">
           <span>© 2026 sBTCFund. Powered by Stacks · Secured by Bitcoin</span>
           <span>All rights reserved.</span>
         </div>

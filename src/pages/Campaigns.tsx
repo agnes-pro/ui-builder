@@ -222,7 +222,7 @@ export default function Campaigns() {
               ))}
             </motion.div>
             {visibleCount < filtered.length && !loadingMore && (
-              <div className="mt-10 text-center">
+              <div className="mt-8 text-center">
                 <Button variant="outline" onClick={handleLoadMore} className="gap-2 border-border">
                   Load More Campaigns
                 </Button>

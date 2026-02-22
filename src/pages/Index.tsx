@@ -276,7 +276,7 @@ export default function Index() {
 
       {/* Trust Indicators */}
       <motion.section
-        className="py-24 bg-background"
+        className="py-16 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -287,19 +287,19 @@ export default function Index() {
             Built on <span className="text-gradient-orange">Bitcoin</span> Security
           </h2>
           <motion.div
-            className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
             {trustIndicators.map((item) => (
-              <motion.div key={item.title} variants={childVariants} className="rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <item.icon className="h-6 w-6 text-primary" />
+              <motion.div key={item.title} variants={childVariants} className="rounded-xl border border-border bg-card p-5 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+                  <item.icon className="h-5 w-5 text-primary" />
                 </div>
                 <h3 className="font-display text-base font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                <p className="mt-1.5 text-sm text-muted-foreground">{item.description}</p>
               </motion.div>
             ))}
           </motion.div>
