@@ -215,7 +215,7 @@ export default function Index() {
             <p className="mt-2 text-muted-foreground">Three simple steps to fund or create a campaign</p>
           </div>
           <motion.div
-            className="mt-10 grid gap-6 md:grid-cols-3"
+            className="mt-8 grid gap-6 md:grid-cols-3"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
