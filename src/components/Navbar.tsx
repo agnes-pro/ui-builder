@@ -153,7 +153,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
                       <LogOut className="h-4 w-4" /> Disconnect
                     </Button>
                   ) : (
-                    <Button onClick={() => setConnectOpen(true)} className="w-full gap-2 gradient-orange border-0 text-primary-foreground">
+                    <Button onClick={() => { setConnectOpen(true); setSheetOpen(false); }} className="w-full gap-2 gradient-orange border-0 text-primary-foreground">
                       <Wallet className="h-4 w-4" /> Connect Wallet
                     </Button>
                   )}
@@ -161,6 +161,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
               </div>
             </SheetContent>
           </Sheet>
+          </div>
         </div>
       </nav>
 
