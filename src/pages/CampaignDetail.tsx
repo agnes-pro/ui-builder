@@ -326,8 +326,7 @@ export default function CampaignDetail() {
             </Card>
 
             {/* Your Contribution */}
-            {wallet.connected && (
-              {(() => {
+            {wallet.connected && (() => {
                 const myContrib = mockContributions.filter(c => c.backer === wallet.address && c.campaignId === campaign.id);
                 const totalContrib = myContrib.reduce((sum, c) => sum + c.amount, 0);
                 const latestContrib = myContrib[0];
@@ -348,8 +347,7 @@ export default function CampaignDetail() {
                 </CardContent>
               </Card>
                 );
-              })()
-            }
+              })()}
           </div>
         </div>
       </div>
