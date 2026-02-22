@@ -57,6 +57,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-06-01"),
     endsAt: new Date("2025-09-01"),
     imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=450&fit=crop",
+    category: "payments",
   },
   {
     id: 4,
