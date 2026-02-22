@@ -147,7 +147,7 @@ export default function Index() {
       />
 
       {/* Hero */}
-      <section ref={heroRef} className="relative min-h-[85vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
         <FloatingParticles />
         <motion.div
           className="container relative z-10 py-16"
