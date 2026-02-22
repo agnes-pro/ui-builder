@@ -91,7 +91,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
+      <div className="flex flex-1 flex-col gap-2.5 p-3.5">
         <h3 className="font-display text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
           {campaign.title}
         </h3>

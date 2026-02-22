@@ -14,9 +14,9 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border bg-card py-8">
+    <footer className="border-t border-border bg-card py-6">
       <div className="container">
-        <div className="grid gap-8 md:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2">

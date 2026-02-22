@@ -295,7 +295,7 @@ export default function Index() {
           >
             {trustIndicators.map((item) => (
               <motion.div key={item.title} variants={childVariants} className="rounded-xl border border-border bg-card p-5 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
                 <h3 className="font-display text-base font-semibold">{item.title}</h3>
