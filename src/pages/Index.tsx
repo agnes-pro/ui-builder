@@ -154,7 +154,7 @@ export default function Index() {
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <div className="animate-fade-in-up mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
+            <div className="animate-fade-in-up mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white/60">
               <Zap className="h-3 w-3 text-primary" />
               Powered by Stacks + Bitcoin
             </div>
