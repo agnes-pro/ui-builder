@@ -55,6 +55,7 @@ export default function Profile() {
           <ConnectWalletModal open={connectOpen} onOpenChange={setConnectOpen} />
         </div>
       </Layout>
+      </PageTransition>
     );
   }
 
