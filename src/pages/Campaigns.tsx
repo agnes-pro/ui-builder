@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus, Loader2 } from "lucide-react";
+import PageTransition from "@/components/PageTransition";
 
 const ITEMS_PER_PAGE = 6;
 
