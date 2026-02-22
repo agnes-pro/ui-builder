@@ -13,6 +13,7 @@ import PageHeader from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw, FolderOpen } from "lucide-react";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
+import Identicon from "@/components/Identicon";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
 

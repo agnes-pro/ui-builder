@@ -14,6 +14,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import PageTransition from "@/components/PageTransition";
 import { CampaignCategory } from "@/types/campaign";
 import { CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
+import { Slider } from "@/components/ui/slider";
+import CampaignCard from "@/components/CampaignCard";
 
 const steps = ["Basic Info", "Funding Goal", "Milestones", "Review"];
 
@@ -22,28 +24,62 @@ interface MilestoneInput {
   percentage: number;
 }
 
+const DRAFT_KEY = "sbtcfund-draft-campaign";
+
+interface DraftState {
+  title: string;
+  description: string;
+  goal: string;
+  duration: string;
+  category: CampaignCategory | "";
+  milestones: MilestoneInput[];
+}
+
+function loadDraft(): DraftState | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export default function CreateCampaign() {
+  const draft = useRef(loadDraft());
   const [step, setStep] = useState(0);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [goal, setGoal] = useState("");
-  const [duration, setDuration] = useState("30");
+  const [title, setTitle] = useState(draft.current?.title || "");
+  const [description, setDescription] = useState(draft.current?.description || "");
+  const [goal, setGoal] = useState(draft.current?.goal || "");
+  const [duration, setDuration] = useState(draft.current?.duration || "30");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [category, setCategory] = useState<CampaignCategory | "">("");
+  const [category, setCategory] = useState<CampaignCategory | "">(draft.current?.category || "");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [milestones, setMilestones] = useState<MilestoneInput[]>([
-    { description: "", percentage: 50 },
-    { description: "", percentage: 50 },
-  ]);
+  const [milestones, setMilestones] = useState<MilestoneInput[]>(
+    draft.current?.milestones || [
+      { description: "", percentage: 50 },
+      { description: "", percentage: 50 },
+    ]
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [txModalOpen, setTxModalOpen] = useState(false);
   const [txStatus, setTxStatus] = useState<TransactionStatus>("signing");
+  const [draftBanner, setDraftBanner] = useState(!!draft.current);
   const { wallet } = useWallet();
 
   useEffect(() => {
     document.title = "Create Campaign | sBTCFund";
   }, []);
+
+  // Draft auto-save (debounced)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const state: DraftState = { title, description, goal, duration, category, milestones };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [title, description, goal, duration, category, milestones]);
 
   useEffect(() => {
     return () => {
@@ -132,7 +168,27 @@ export default function CreateCampaign() {
     setTxModalOpen(true);
     setTimeout(() => setTxStatus("broadcasting"), 2000);
     setTimeout(() => setTxStatus("pending"), 4000);
-    setTimeout(() => setTxStatus("success"), 6000);
+    setTimeout(() => {
+      setTxStatus("success");
+      localStorage.removeItem(DRAFT_KEY);
+    }, 6000);
+  };
+
+  // Build a preview campaign for the review step
+  const previewCampaign = {
+    id: 0,
+    title: title || "Your Campaign",
+    description,
+    creator: wallet.address || "SP...",
+    goalAmount: Number(goal) || 0,
+    raisedAmount: 0,
+    backerCount: 0,
+    status: "active" as const,
+    milestones: milestones.map((m, i) => ({ id: i + 1, description: m.description, percentage: m.percentage, completed: false })),
+    createdAt: new Date(),
+    endsAt: new Date(Date.now() + Number(duration) * 86400000),
+    imageUrl: imagePreview || "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=450&fit=crop",
+    category: (category || "infrastructure") as CampaignCategory,
   };
 
   return (
@@ -143,6 +199,16 @@ export default function CreateCampaign() {
 
         <h1 className="font-display text-3xl font-bold">Create Campaign</h1>
         <p className="mt-2 text-muted-foreground">Launch your project on Bitcoin</p>
+
+        {/* Draft restored banner */}
+        {draftBanner && (
+          <div className="mt-4 flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm text-primary">
+            <span>📝 Draft restored from your previous session</span>
+            <button onClick={() => { setDraftBanner(false); localStorage.removeItem(DRAFT_KEY); setTitle(""); setDescription(""); setGoal(""); setDuration("30"); setCategory(""); setMilestones([{ description: "", percentage: 50 }, { description: "", percentage: 50 }]); }} className="text-xs underline hover:no-underline">
+              Discard
+            </button>
+          </div>
+        )}
 
         {/* Step Indicator */}
         <div className="mt-8 flex items-center gap-2">
@@ -301,10 +367,28 @@ export default function CreateCampaign() {
                     {totalPercentage}%
                   </Badge>
                 </div>
+
+                {/* Stacked bar visualization */}
+                <div className="h-3 w-full rounded-full bg-secondary overflow-hidden flex">
+                  {milestones.map((m, i) => (
+                    <div
+                      key={i}
+                      className="h-full transition-all duration-300"
+                      style={{
+                        width: `${m.percentage}%`,
+                        background: `hsl(${33 + i * 40}, 80%, ${55 - i * 5}%)`,
+                      }}
+                    />
+                  ))}
+                </div>
+
                 {errors.milestones && <p className="text-xs text-destructive">{errors.milestones}</p>}
                 {milestones.map((m, i) => (
                   <div key={i} className="flex gap-3 items-start">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-muted-foreground/30 text-xs text-muted-foreground mt-1">
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-primary-foreground mt-1"
+                      style={{ background: `hsl(${33 + i * 40}, 80%, ${55 - i * 5}%)` }}
+                    >
                       {i + 1}
                     </div>
                     <div className="flex-1 space-y-2">
@@ -317,17 +401,17 @@ export default function CreateCampaign() {
                         aria-invalid={!!errors[`milestone_${i}`]}
                       />
                       {errors[`milestone_${i}`] && <p className="text-xs text-destructive">{errors[`milestone_${i}`]}</p>}
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="number"
-                          value={m.percentage}
-                          onChange={(e) => updateMilestone(i, "percentage", Number(e.target.value))}
-                          className="w-24 bg-secondary border-border font-mono"
-                          min={1}
+                      <div className="flex items-center gap-3">
+                        <Slider
+                          value={[m.percentage]}
+                          onValueChange={([v]) => updateMilestone(i, "percentage", v)}
+                          min={0}
                           max={100}
+                          step={5}
+                          className="flex-1"
                           aria-label={`Milestone ${i + 1} percentage`}
                         />
-                        <span className="text-sm text-muted-foreground">%</span>
+                        <span className="w-12 text-right font-mono text-sm text-muted-foreground">{m.percentage}%</span>
                       </div>
                     </div>
                     {milestones.length > 2 && (
@@ -351,6 +435,15 @@ export default function CreateCampaign() {
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-primary">
                   ⚠️ Once launched, campaign details cannot be changed. Please review carefully.
                 </div>
+
+                {/* Campaign Card Preview */}
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest mb-3">Card Preview</p>
+                  <div className="max-w-sm mx-auto pointer-events-none">
+                    <CampaignCard campaign={previewCampaign} />
+                  </div>
+                </div>
+
                 {imagePreview && (
                   <div className="rounded-xl overflow-hidden border border-border">
                     <img src={imagePreview} alt="Campaign banner" className="h-32 w-full object-cover" />

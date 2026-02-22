@@ -50,6 +50,37 @@ const statusConfig: Record<TransactionStatus, { icon: React.ElementType; title: 
   },
 };
 
+// CSS confetti
+function Confetti() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {Array.from({ length: 30 }).map((_, i) => (
+        <span
+          key={i}
+          className="absolute block rounded-sm animate-confetti"
+          style={{
+            left: `${Math.random() * 100}%`,
+            width: `${6 + Math.random() * 6}px`,
+            height: `${6 + Math.random() * 6}px`,
+            background: `hsl(${Math.random() * 360}, 80%, 60%)`,
+            animationDelay: `${Math.random() * 0.5}s`,
+            animationDuration: `${1 + Math.random() * 1.5}s`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes confetti-fall {
+          0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
+        }
+        .animate-confetti {
+          animation: confetti-fall 2s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function TransactionStatusModal({
   open,
   onOpenChange,
@@ -68,11 +99,12 @@ export default function TransactionStatusModal({
   return (
     <Dialog open={open} onOpenChange={isTerminal ? onOpenChange : undefined}>
       <DialogContent
-        className="border-border bg-card sm:max-w-sm text-center"
+        className="border-border bg-card sm:max-w-sm text-center relative overflow-hidden"
         onInteractOutside={(e) => { if (!isTerminal) e.preventDefault(); }}
         onEscapeKeyDown={(e) => { if (!isTerminal) e.preventDefault(); }}
       >
-        <DialogHeader className="items-center">
+        {status === "success" && <Confetti />}
+        <DialogHeader className="items-center relative z-10">
           <div className={`mx-auto mb-2 flex h-16 w-16 items-center justify-center rounded-2xl ${
             status === "success" ? "bg-success/10" : status === "error" ? "bg-destructive/10" : "bg-primary/10"
           }`}>
@@ -90,7 +122,7 @@ export default function TransactionStatusModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 pt-2">
+        <div className="space-y-4 pt-2 relative z-10">
           {amount && campaignTitle && status === "success" && (
             <div className="rounded-lg bg-secondary p-4 space-y-1">
               <p className="font-mono text-lg font-semibold text-foreground">{amount} STX</p>
