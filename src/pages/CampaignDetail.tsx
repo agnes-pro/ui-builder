@@ -114,7 +114,7 @@ export default function CampaignDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
-      <div className="container relative -mt-20 pb-20">
+      <div className="container relative -mt-16 pb-14">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
 
         <Button asChild variant="ghost" size="sm" className="mb-4 gap-1 text-muted-foreground">
