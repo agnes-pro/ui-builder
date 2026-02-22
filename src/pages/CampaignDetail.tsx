@@ -140,9 +140,9 @@ export default function CampaignDetail() {
         </p>
 
         {/* Two-column */}
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_380px]">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
           {/* Left */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             {/* Description */}
             <section>
               <h2 className="font-display text-xl font-semibold mb-4">About this Campaign</h2>
