@@ -162,7 +162,7 @@ export default function CampaignDetail() {
                   <p className="font-mono text-sm text-foreground">{truncateAddress(campaign.creator)}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><User className="h-3 w-3" /> Member since {campaign.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span>
-                    <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> 3 campaigns</span>
+                    <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {mockCampaigns.filter(c => c.creator === campaign.creator).length} campaigns</span>
                   </div>
                   <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline" rel="noopener noreferrer">
                     <ExternalLink className="h-3 w-3" /> View on Explorer
