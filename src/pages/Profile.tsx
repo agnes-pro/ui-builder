@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw } from "lucide-react";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
+import PageTransition from "@/components/PageTransition";
 
 const activityIcons: Record<string, React.ElementType> = {
   created: Rocket,
@@ -40,8 +41,9 @@ export default function Profile() {
 
   if (!wallet.connected) {
     return (
+      <PageTransition>
       <Layout>
-        <div className="container py-20 text-center animate-fade-in-up">
+        <div className="container py-20 text-center">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary">
             <Wallet className="h-10 w-10 text-muted-foreground" />
           </div>
@@ -53,6 +55,7 @@ export default function Profile() {
           <ConnectWalletModal open={connectOpen} onOpenChange={setConnectOpen} />
         </div>
       </Layout>
+      </PageTransition>
     );
   }
 
@@ -68,8 +71,9 @@ export default function Profile() {
   const myContributions = mockContributions.filter((c) => c.backer === wallet.address);
 
   return (
+    <PageTransition>
     <Layout>
-      <div className="container py-12 animate-fade-in-up">
+      <div className="container py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "My Profile" }]} />
 
         {/* Profile Header */}
@@ -177,5 +181,6 @@ export default function Profile() {
         </Tabs>
       </div>
     </Layout>
+    </PageTransition>
   );
 }

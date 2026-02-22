@@ -13,6 +13,7 @@ import CampaignDetailSkeleton from "@/components/skeletons/CampaignDetailSkeleto
 import ImageWithFallback from "@/components/ImageWithFallback";
 import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, Share2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import PageTransition from "@/components/PageTransition";
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success border-success/30",
@@ -84,6 +85,7 @@ export default function CampaignDetail() {
   const completedMilestones = campaign.milestones.filter((m) => m.completed).length;
 
   return (
+    <PageTransition>
     <Layout>
       {/* Banner */}
       <div className="relative h-64 w-full overflow-hidden md:h-80">
@@ -91,7 +93,7 @@ export default function CampaignDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
-      <div className="container relative -mt-20 pb-20 animate-fade-in-up">
+      <div className="container relative -mt-20 pb-20">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
 
         {/* Back */}
@@ -283,5 +285,6 @@ export default function CampaignDetail() {
         }}
       />
     </Layout>
+    </PageTransition>
   );
 }

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus, Loader2 } from "lucide-react";
+import PageTransition from "@/components/PageTransition";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -70,8 +71,9 @@ export default function Campaigns() {
   }, [search, statusFilter, sortBy]);
 
   return (
+    <PageTransition>
     <Layout>
-      <div className="container py-12 animate-fade-in-up">
+      <div className="container py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns" }]} />
 
         {/* Header */}
@@ -169,5 +171,6 @@ export default function Campaigns() {
         )}
       </div>
     </Layout>
+    </PageTransition>
   );
 }
