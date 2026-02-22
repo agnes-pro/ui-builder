@@ -150,7 +150,7 @@ export default function Index() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container max-w-4xl">
           <div className="text-center">
