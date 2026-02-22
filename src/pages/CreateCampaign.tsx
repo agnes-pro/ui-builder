@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Check, ImagePlus, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ImagePlus, Plus, Trash2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -26,6 +26,9 @@ export default function CreateCampaign() {
   const [description, setDescription] = useState("");
   const [goal, setGoal] = useState("");
   const [duration, setDuration] = useState("30");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [milestones, setMilestones] = useState<MilestoneInput[]>([
     { description: "", percentage: 50 },
     { description: "", percentage: 50 },
@@ -38,6 +41,32 @@ export default function CreateCampaign() {
   useEffect(() => {
     document.title = "Create Campaign | sBTCFund";
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+    };
+  }, [imagePreview]);
+
+  const handleImageSelect = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  }, [imagePreview]);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageSelect(file);
+  }, [handleImageSelect]);
+
+  const removeImage = () => {
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const totalPercentage = milestones.reduce((sum, m) => sum + m.percentage, 0);
 
@@ -162,12 +191,40 @@ export default function CreateCampaign() {
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-foreground mb-2 block">Banner Image</Label>
-                  <div className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors">
-                    <div className="text-center text-muted-foreground">
-                      <ImagePlus className="mx-auto h-8 w-8 mb-2" />
-                      <p className="text-sm">Click or drag to upload</p>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageSelect(file);
+                    }}
+                  />
+                  {imagePreview ? (
+                    <div className="relative rounded-xl overflow-hidden border border-border">
+                      <img src={imagePreview} alt="Banner preview" className="h-40 w-full object-cover" />
+                      <button
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 text-muted-foreground backdrop-blur-sm hover:text-destructive transition-colors"
+                        aria-label="Remove image"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
                     </div>
-                  </div>
+                  ) : (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={handleDrop}
+                      className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors"
+                    >
+                      <div className="text-center text-muted-foreground">
+                        <ImagePlus className="mx-auto h-8 w-8 mb-2" />
+                        <p className="text-sm">Click or drag to upload</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -276,6 +333,11 @@ export default function CreateCampaign() {
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-primary">
                   ⚠️ Once launched, campaign details cannot be changed. Please review carefully.
                 </div>
+                {imagePreview && (
+                  <div className="rounded-xl overflow-hidden border border-border">
+                    <img src={imagePreview} alt="Campaign banner" className="h-32 w-full object-cover" />
+                  </div>
+                )}
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-widest">Title</p>
