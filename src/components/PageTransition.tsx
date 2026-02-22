@@ -20,12 +20,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      transition={{
-        enter: { duration: 0.3, ease: "easeOut" },
-        exit: { duration: 0.2, ease: "easeIn" },
-        duration: 0.3,
-        ease: "easeOut",
-      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {children}
     </motion.div>
