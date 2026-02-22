@@ -362,6 +362,10 @@ export default function CreateCampaign() {
                     <p className="font-semibold text-foreground mt-1">{title}</p>
                   </div>
                   <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Category</p>
+                    <p className="font-semibold text-foreground mt-1">{CAMPAIGN_CATEGORIES.find(c => c.value === category)?.label}</p>
+                  </div>
+                  <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-widest">Goal</p>
                     <p className="font-semibold text-foreground mt-1 font-mono">{Number(goal).toLocaleString()} STX</p>
                   </div>
