@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Campaign } from "@/types/campaign";
 import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
 import { Badge } from "@/components/ui/badge";
@@ -12,15 +13,32 @@ const statusColors: Record<string, string> = {
   failed: "bg-destructive/20 text-destructive border-destructive/30",
 };
 
+const MotionLink = motion.create(Link);
+
+const prefersReducedMotion =
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export default function CampaignCard({ campaign }: { campaign: Campaign }) {
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
 
   return (
-    <Link
+    <MotionLink
       to={`/campaign/${campaign.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       aria-label={`Campaign: ${campaign.title}, ${progress}% funded`}
+      whileHover={
+        prefersReducedMotion
+          ? undefined
+          : {
+              y: -6,
+              scale: 1.02,
+              boxShadow: "0 20px 40px -12px hsl(var(--primary) / 0.15)",
+            }
+      }
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       {/* Image */}
       <div className="relative aspect-video overflow-hidden">
@@ -76,6 +94,6 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
           </span>
         </div>
       </div>
-    </Link>
+    </MotionLink>
   );
 }
