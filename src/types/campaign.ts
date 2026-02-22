@@ -29,6 +29,7 @@ export interface Campaign {
   createdAt: Date;
   endsAt: Date;
   imageUrl: string;
+  category: CampaignCategory;
 }
 
 export interface WalletState {
