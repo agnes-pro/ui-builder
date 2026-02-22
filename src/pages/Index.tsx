@@ -203,7 +203,7 @@ export default function Index() {
 
       {/* How It Works */}
       <motion.section
-        className="py-16 bg-background"
+        className="py-12 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
