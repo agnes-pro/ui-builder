@@ -139,3 +139,21 @@ export function getDaysLeft(endsAt: Date): number {
 export function getProgressPercentage(raised: number, goal: number): number {
   return Math.min(100, Math.round((raised / goal) * 100));
 }
+
+export interface Activity {
+  id: string;
+  type: "created" | "contributed" | "milestone" | "refund";
+  description: string;
+  timestamp: Date;
+  campaignId?: number;
+  amount?: number;
+}
+
+export const mockActivities: Activity[] = [
+  { id: "a1", type: "contributed", description: "Contributed 500 STX to Decentralized Bitcoin Marketplace", timestamp: new Date("2026-02-20"), campaignId: 1, amount: 500 },
+  { id: "a2", type: "created", description: "Created campaign: Bitcoin Lightning Bridge", timestamp: new Date("2026-02-18"), campaignId: 6 },
+  { id: "a3", type: "milestone", description: "Milestone 1 completed for sBTC Payment Gateway", timestamp: new Date("2026-02-15"), campaignId: 3 },
+  { id: "a4", type: "contributed", description: "Contributed 2,000 STX to Bitcoin Lightning Bridge", timestamp: new Date("2026-02-10"), campaignId: 6, amount: 2000 },
+  { id: "a5", type: "refund", description: "Refund received from Stacks DAO Governance Tool", timestamp: new Date("2026-01-25"), campaignId: 5, amount: 750 },
+  { id: "a6", type: "contributed", description: "Contributed 1,000 STX to Bitcoin DeFi Analytics Dashboard", timestamp: new Date("2026-01-12"), campaignId: 2, amount: 1000 },
+];

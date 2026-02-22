@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Wallet, ChevronDown, LogOut, User, Copy } from "lucide-react";
+import { Menu, Wallet, ChevronDown, LogOut, User, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
 import { truncateAddress } from "@/data/mockData";
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
+import { useToast } from "@/hooks/use-toast";
 
 const navLinks = [
   { href: "/campaigns", label: "Campaigns" },
@@ -20,14 +21,27 @@ const navLinks = [
   { href: "/profile", label: "My Profile" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ scrolled }: { scrolled?: boolean }) {
   const { wallet, disconnectWallet } = useWallet();
   const [connectOpen, setConnectOpen] = useState(false);
   const location = useLocation();
+  const { toast } = useToast();
+
+  const copyAddress = async () => {
+    if (wallet.address) {
+      await navigator.clipboard.writeText(wallet.address);
+      toast({ title: "Address copied", description: "Wallet address copied to clipboard" });
+    }
+  };
+
+  const handleDisconnect = () => {
+    disconnectWallet();
+    toast({ title: "Wallet disconnected", description: "Your wallet has been disconnected" });
+  };
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] glass">
+      <nav className={`fixed top-0 left-0 right-0 z-50 h-[72px] glass transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-background/50" : ""}`}>
         <div className="container flex h-full items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
@@ -68,7 +82,7 @@ export default function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-card border-border">
-                  <DropdownMenuItem className="gap-2 text-muted-foreground">
+                  <DropdownMenuItem onClick={copyAddress} className="gap-2 text-muted-foreground cursor-pointer">
                     <Copy className="h-4 w-4" /> Copy Address
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -77,13 +91,13 @@ export default function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={disconnectWallet} className="gap-2 text-destructive">
+                  <DropdownMenuItem onClick={handleDisconnect} className="gap-2 text-destructive cursor-pointer">
                     <LogOut className="h-4 w-4" /> Disconnect
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button onClick={() => setConnectOpen(true)} className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90">
+              <Button onClick={() => setConnectOpen(true)} className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-transform">
                 <Wallet className="h-4 w-4" /> Connect Wallet
               </Button>
             )}
@@ -109,7 +123,7 @@ export default function Navbar() {
                 ))}
                 <div className="pt-4">
                   {wallet.connected ? (
-                    <Button variant="outline" onClick={disconnectWallet} className="w-full gap-2">
+                    <Button variant="outline" onClick={handleDisconnect} className="w-full gap-2">
                       <LogOut className="h-4 w-4" /> Disconnect
                     </Button>
                   ) : (

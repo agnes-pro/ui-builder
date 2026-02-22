@@ -5,9 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useWallet } from "@/contexts/WalletContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContributeModal from "@/components/ContributeModal";
-import { ArrowLeft, Calendar, Check, Circle, Clock, Copy, ExternalLink, Share2, Users } from "lucide-react";
+import TransactionStatusModal, { TransactionStatus } from "@/components/TransactionStatusModal";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import CampaignDetailSkeleton from "@/components/skeletons/CampaignDetailSkeleton";
+import ImageWithFallback from "@/components/ImageWithFallback";
+import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, Share2, Users } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success border-success/30",
@@ -20,7 +25,37 @@ export default function CampaignDetail() {
   const { id } = useParams();
   const campaign = mockCampaigns.find((c) => c.id === Number(id));
   const [contributeOpen, setContributeOpen] = useState(false);
+  const [txModalOpen, setTxModalOpen] = useState(false);
+  const [txStatus, setTxStatus] = useState<TransactionStatus>("signing");
+  const [txAmount, setTxAmount] = useState("");
   const { wallet } = useWallet();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = campaign ? `${campaign.title} | sBTCFund` : "Campaign | sBTCFund";
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, [campaign]);
+
+  const copyCreatorAddress = async () => {
+    if (campaign) {
+      await navigator.clipboard.writeText(campaign.creator);
+      toast({ title: "Address copied", description: "Creator address copied to clipboard" });
+    }
+  };
+
+  const handleContribute = (amount: string) => {
+    setTxAmount(amount);
+    setContributeOpen(false);
+    setTxStatus("signing");
+    setTxModalOpen(true);
+
+    // Simulate transaction flow
+    setTimeout(() => setTxStatus("broadcasting"), 2000);
+    setTimeout(() => setTxStatus("pending"), 4000);
+    setTimeout(() => setTxStatus("success"), 6000);
+  };
 
   if (!campaign) {
     return (
@@ -35,6 +70,14 @@ export default function CampaignDetail() {
     );
   }
 
+  if (loading) {
+    return (
+      <Layout>
+        <CampaignDetailSkeleton />
+      </Layout>
+    );
+  }
+
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
   const contributions = mockContributions.filter((c) => c.campaignId === campaign.id);
@@ -44,11 +87,13 @@ export default function CampaignDetail() {
     <Layout>
       {/* Banner */}
       <div className="relative h-64 w-full overflow-hidden md:h-80">
-        <img src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" />
+        <ImageWithFallback src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" fallbackClassName="h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
-      <div className="container relative -mt-20 pb-20">
+      <div className="container relative -mt-20 pb-20 animate-fade-in-up">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
+
         {/* Back */}
         <Button asChild variant="ghost" size="sm" className="mb-4 gap-1 text-muted-foreground">
           <Link to="/campaigns"><ArrowLeft className="h-4 w-4" /> All Campaigns</Link>
@@ -65,7 +110,9 @@ export default function CampaignDetail() {
         <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{campaign.title}</h1>
         <p className="mt-2 font-mono text-sm text-muted-foreground">
           by {truncateAddress(campaign.creator)}
-          <button className="ml-2 text-primary hover:text-primary/80"><Copy className="inline h-3.5 w-3.5" /></button>
+          <button onClick={copyCreatorAddress} className="ml-2 text-primary hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="Copy creator address">
+            <Copy className="inline h-3.5 w-3.5" />
+          </button>
         </p>
 
         {/* Two-column */}
@@ -85,7 +132,7 @@ export default function CampaignDetail() {
               <h2 className="font-display text-xl font-semibold mb-6">Milestones</h2>
               <div className="space-y-4">
                 {campaign.milestones.map((milestone, i) => (
-                  <div key={milestone.id} className={`rounded-xl border p-5 transition-all ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
+                  <div key={milestone.id} className={`rounded-xl border p-5 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
                     <div className="flex items-start gap-4">
                       <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${milestone.completed ? "bg-success text-success-foreground" : "border-2 border-muted-foreground/30 text-muted-foreground"}`}>
                         {milestone.completed ? <Check className="h-4 w-4 text-background" /> : <span className="text-xs font-semibold">{i + 1}</span>}
@@ -113,7 +160,7 @@ export default function CampaignDetail() {
               ) : (
                 <div className="space-y-3">
                   {contributions.map((c) => (
-                    <div key={c.id} className="flex items-center justify-between rounded-lg border border-border bg-card p-4">
+                    <div key={c.id} className="flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
                       <div>
                         <p className="font-mono text-sm text-foreground">{truncateAddress(c.backer)}</p>
                         <p className="text-xs text-muted-foreground">{c.timestamp.toLocaleDateString()}</p>
@@ -137,7 +184,7 @@ export default function CampaignDetail() {
                     <span className="text-sm text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
                   </div>
                   <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-secondary">
-                    <div className="h-full rounded-full gradient-orange transition-all duration-700" style={{ width: `${progress}%` }} />
+                    <div className="h-full rounded-full gradient-orange transition-all duration-1000 ease-out" style={{ width: `${progress}%` }} />
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{progress}% funded</p>
                 </div>
@@ -158,17 +205,17 @@ export default function CampaignDetail() {
                 {campaign.status === "active" && (
                   <Button
                     onClick={() => setContributeOpen(true)}
-                    className="w-full h-12 text-base gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow"
+                    className="w-full h-12 text-base gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
                   >
                     Contribute STX
                   </Button>
                 )}
 
                 <div className="flex items-center justify-center gap-4 text-muted-foreground">
-                  <button className="flex items-center gap-1 text-xs hover:text-primary">
+                  <button className="flex items-center gap-1 text-xs hover:text-primary focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="Share campaign">
                     <Share2 className="h-3.5 w-3.5" /> Share
                   </button>
-                  <button className="flex items-center gap-1 text-xs hover:text-primary">
+                  <button className="flex items-center gap-1 text-xs hover:text-primary focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="View on explorer">
                     <ExternalLink className="h-3.5 w-3.5" /> Explorer
                   </button>
                 </div>
@@ -220,7 +267,21 @@ export default function CampaignDetail() {
         </div>
       </div>
 
-      <ContributeModal open={contributeOpen} onOpenChange={setContributeOpen} campaign={campaign} />
+      <ContributeModal open={contributeOpen} onOpenChange={setContributeOpen} campaign={campaign} onContribute={handleContribute} />
+      <TransactionStatusModal
+        open={txModalOpen}
+        onOpenChange={setTxModalOpen}
+        status={txStatus}
+        amount={txAmount}
+        campaignTitle={campaign.title}
+        txHash="0x8a3f...b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8"
+        onRetry={() => {
+          setTxStatus("signing");
+          setTimeout(() => setTxStatus("broadcasting"), 2000);
+          setTimeout(() => setTxStatus("pending"), 4000);
+          setTimeout(() => setTxStatus("success"), 6000);
+        }}
+      />
     </Layout>
   );
 }

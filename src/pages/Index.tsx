@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
 import { mockCampaigns, formatSTX } from "@/data/mockData";
-import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle } from "lucide-react";
+import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle, Github, Twitter } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
@@ -12,6 +12,13 @@ function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string })
   const started = useRef(false);
 
   useEffect(() => {
+    // Respect reduced motion
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      setCount(end);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
@@ -75,8 +82,18 @@ const trustIndicators = [
   { icon: Eye, title: "Fully Transparent", description: "All transactions and milestones visible on-chain" },
 ];
 
+const footerLinks = [
+  { label: "Campaigns", href: "/campaigns" },
+  { label: "Create", href: "/create" },
+  { label: "My Profile", href: "/profile" },
+];
+
 export default function Index() {
   const featured = mockCampaigns.filter((c) => c.status === "active" || c.status === "funded").slice(0, 6);
+
+  useEffect(() => {
+    document.title = "sBTCFund — Decentralized Crowdfunding on Bitcoin";
+  }, []);
 
   return (
     <Layout>
@@ -92,12 +109,12 @@ export default function Index() {
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <Button asChild size="lg" className="h-12 gap-2 gradient-orange border-0 text-primary-foreground text-base hover:opacity-90 animate-pulse-glow">
+              <Button asChild size="lg" className="h-12 gap-2 gradient-orange border-0 text-primary-foreground text-base hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
                 <Link to="/campaigns">
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 border-border text-base hover:bg-secondary">
+              <Button asChild variant="outline" size="lg" className="h-12 border-border text-base hover:bg-secondary active:scale-[0.98] transition-transform">
                 <Link to="/create">Create Campaign</Link>
               </Button>
             </div>
@@ -126,7 +143,7 @@ export default function Index() {
           </div>
           <div className="mt-16 grid gap-8 md:grid-cols-3">
             {howItWorks.map((step, i) => (
-              <div key={step.title} className="group relative rounded-xl border border-border bg-card p-8 text-center transition-all hover:border-primary/30 hover:glow-orange">
+              <div key={step.title} className="group relative rounded-xl border border-border bg-card p-8 text-center transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1">
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
                   <step.icon className="h-8 w-8 text-primary" />
                 </div>
@@ -174,7 +191,7 @@ export default function Index() {
           </h2>
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {trustIndicators.map((item) => (
-              <div key={item.title} className="rounded-xl border border-border bg-card p-6 text-center transition-all hover:border-primary/30">
+              <div key={item.title} className="rounded-xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-primary/30 hover:-translate-y-1">
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                   <item.icon className="h-6 w-6 text-primary" />
                 </div>
@@ -188,16 +205,56 @@ export default function Index() {
 
       {/* Footer */}
       <footer className="border-t border-border bg-card py-12">
-        <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-orange">
-              <span className="text-sm font-bold text-primary-foreground">₿</span>
+        <div className="container">
+          <div className="grid gap-8 md:grid-cols-3">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-orange">
+                  <span className="text-sm font-bold text-primary-foreground">₿</span>
+                </div>
+                <span className="font-display text-lg font-bold">sBTC<span className="text-primary">Fund</span></span>
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground max-w-xs">
+                Decentralized crowdfunding powered by Stacks and secured by Bitcoin.
+              </p>
             </div>
-            <span className="font-display text-lg font-bold">sBTC<span className="text-primary">Fund</span></span>
+
+            {/* Links */}
+            <div>
+              <h4 className="font-display text-sm font-semibold text-foreground mb-3">Navigation</h4>
+              <ul className="space-y-2">
+                {footerLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Social & Badge */}
+            <div>
+              <h4 className="font-display text-sm font-semibold text-foreground mb-3">Community</h4>
+              <div className="flex gap-3">
+                <a href="#" className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-colors" aria-label="Twitter">
+                  <Twitter className="h-4 w-4" />
+                </a>
+                <a href="#" className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-colors" aria-label="GitHub">
+                  <Github className="h-4 w-4" />
+                </a>
+              </div>
+              <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1.5 text-xs text-muted-foreground">
+                <div className="h-2 w-2 rounded-full bg-success" />
+                Built on Stacks
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Powered by Stacks · Secured by Bitcoin
-          </p>
+
+          <div className="mt-8 border-t border-border pt-6 text-center text-xs text-muted-foreground">
+            © 2026 sBTCFund. Powered by Stacks · Secured by Bitcoin
+          </div>
         </div>
       </footer>
     </Layout>
