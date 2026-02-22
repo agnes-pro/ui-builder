@@ -184,7 +184,7 @@ export default function Index() {
                   <div className="font-display text-3xl font-bold text-white md:text-4xl">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="mt-1 text-sm text-white/60">{stat.label}</div>
                 </div>
               ))}
             </div>
