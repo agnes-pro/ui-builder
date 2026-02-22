@@ -287,7 +287,7 @@ export default function Index() {
             Built on <span className="text-gradient-orange">Bitcoin</span> Security
           </h2>
           <motion.div
-            className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
