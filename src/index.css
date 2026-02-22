@@ -120,6 +120,22 @@
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(263 70% 58%) 0%, hsl(187 92% 55%) 100%);
   }
+
+  .gradient-progress-mid {
+    background: linear-gradient(135deg, hsl(33 93% 54%) 0%, hsl(38 92% 50%) 100%);
+  }
+
+  .gradient-progress-high {
+    background: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(142 71% 45%) 100%);
+  }
+
+  .gradient-progress-success {
+    background: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 55%) 100%);
+  }
+
+  .skip-link {
+    @apply absolute -top-10 left-4 z-[100] rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all focus:top-4;
+  }
 }
 
 /* Animations */

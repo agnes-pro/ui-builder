@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useWallet } from "@/contexts/WalletContext";
 import { Campaign } from "@/types/campaign";
 import { formatSTX, getProgressPercentage } from "@/data/mockData";
+import { STX_USD_RATE, getProgressColor } from "@/lib/utils";
 
 interface Props {
   open: boolean;

@@ -157,3 +157,18 @@ export const mockActivities: Activity[] = [
   { id: "a5", type: "refund", description: "Refund received from Stacks DAO Governance Tool", timestamp: new Date("2026-01-25"), campaignId: 5, amount: 750 },
   { id: "a6", type: "contributed", description: "Contributed 1,000 STX to Bitcoin DeFi Analytics Dashboard", timestamp: new Date("2026-01-12"), campaignId: 2, amount: 1000 },
 ];
+
+export interface CampaignUpdate {
+  id: string;
+  campaignId: number;
+  title: string;
+  content: string;
+  date: Date;
+}
+
+export const mockUpdates: CampaignUpdate[] = [
+  { id: "u1", campaignId: 1, title: "Smart Contract Audit Complete", content: "We've completed the security audit with CertiK. All critical findings have been addressed and the contracts are now ready for testnet deployment.", date: new Date("2026-02-15") },
+  { id: "u2", campaignId: 1, title: "Beta Testing Begins", content: "Excited to announce that our beta testing phase has begun! We've onboarded 50 initial testers and are collecting feedback on the marketplace UI.", date: new Date("2026-02-01") },
+  { id: "u3", campaignId: 6, title: "Bridge Protocol Design Finalized", content: "The bridge protocol specification has been finalized and peer-reviewed. We're now moving into the implementation phase with our relayer network.", date: new Date("2026-01-20") },
+  { id: "u4", campaignId: 2, title: "Dashboard V2 Released", content: "We've shipped the v2 of our analytics dashboard with improved charting, real-time data feeds, and support for 12 new DeFi protocols on Stacks.", date: new Date("2026-01-10") },
+];
