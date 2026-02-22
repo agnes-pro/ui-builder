@@ -80,7 +80,7 @@ export default function Profile() {
     <PageTransition>
     <Layout>
       <SEOHead title="My Profile | sBTCFund" description="View your sBTCFund profile, campaigns, and contributions." />
-      <div className="container py-12">
+      <div className="container py-10">
         <PageHeader
           breadcrumbs={[{ label: "Home", href: "/" }, { label: "My Profile" }]}
           title={truncateAddress(wallet.address!)}
