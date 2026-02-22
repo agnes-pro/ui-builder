@@ -29,6 +29,7 @@ export default function CreateCampaign() {
   const [goal, setGoal] = useState("");
   const [duration, setDuration] = useState("30");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [category, setCategory] = useState<CampaignCategory | "">("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [milestones, setMilestones] = useState<MilestoneInput[]>([
