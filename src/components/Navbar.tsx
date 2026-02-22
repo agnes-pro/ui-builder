@@ -46,7 +46,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 h-[72px] glass transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-background/50" : ""}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 h-16 glass transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-background/50" : ""}`}>
         <div className="container flex h-full items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">

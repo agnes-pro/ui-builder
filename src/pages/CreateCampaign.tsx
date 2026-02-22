@@ -480,7 +480,7 @@ export default function CreateCampaign() {
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between pt-8">
+            <div className="flex justify-between pt-6">
               <Button
                 variant="outline"
                 onClick={() => setStep(step - 1)}

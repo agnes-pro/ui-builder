@@ -166,8 +166,8 @@ export default function Profile() {
               {mockActivities.map((activity) => {
                 const Icon = activityIcons[activity.type] || Coins;
                 return (
-                  <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
-                    <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                    <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-border bg-card p-3.5 transition-colors hover:bg-secondary/50">
+                    <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
                       activity.type === "contributed" ? "bg-primary/10 text-primary" :
                       activity.type === "created" ? "bg-success/10 text-success" :
                       activity.type === "milestone" ? "bg-cyan/10 text-cyan" :

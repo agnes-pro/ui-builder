@@ -284,7 +284,7 @@ export default function CampaignDetail() {
                 {campaign.status === "active" && (
                   <Button
                     onClick={() => setContributeOpen(true)}
-                    className="w-full h-12 text-base gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
+                    className="w-full h-10 text-sm gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
                   >
                     Contribute STX
                   </Button>
