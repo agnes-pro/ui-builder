@@ -197,7 +197,7 @@ export default function CreateCampaign() {
       <div className="container max-w-2xl py-10">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Create Campaign" }]} />
 
-        <h1 className="font-display text-3xl font-bold">Create Campaign</h1>
+        <h1 className="font-display text-2xl font-bold">Create Campaign</h1>
         <p className="mt-2 text-muted-foreground">Launch your project on Bitcoin</p>
 
         {/* Draft restored banner */}
