@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
@@ -6,6 +7,11 @@ import { mockCampaigns, formatSTX } from "@/data/mockData";
 import { ArrowRight, Shield, Target, RefreshCw, Eye, Rocket, Coins, CheckCircle, Github, Twitter } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import PageTransition from "@/components/PageTransition";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -172,11 +178,17 @@ export default function Index() {
               <Link to="/campaigns">View All <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {featured.map((campaign) => (
               <CampaignCard key={campaign.id} campaign={campaign} />
             ))}
-          </div>
+          </motion.div>
           <div className="mt-8 text-center md:hidden">
             <Button asChild variant="ghost" className="gap-2 text-primary">
               <Link to="/campaigns">View All Campaigns <ArrowRight className="h-4 w-4" /></Link>

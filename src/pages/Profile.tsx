@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useWallet } from "@/contexts/WalletContext";
 import { mockCampaigns, mockContributions, mockActivities, truncateAddress, formatSTX } from "@/data/mockData";
@@ -12,6 +13,11 @@ import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw } fro
 import ConnectWalletModal from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 const activityIcons: Record<string, React.ElementType> = {
   created: Rocket,
@@ -115,9 +121,14 @@ export default function Profile() {
                 </Button>
               </div>
             ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 {myCampaigns.map((c) => <CampaignCard key={c.id} campaign={c} />)}
-              </div>
+              </motion.div>
             )}
           </TabsContent>
 

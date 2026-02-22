@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import CampaignCard from "@/components/CampaignCard";
 import CampaignCardSkeleton from "@/components/skeletons/CampaignCardSkeleton";
@@ -10,6 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus, Loader2 } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 const ITEMS_PER_PAGE = 6;
 
@@ -152,14 +158,20 @@ export default function Campaigns() {
           </div>
         ) : (
           <>
-            <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
+            <motion.div
+              key={`${search}-${statusFilter}-${sortBy}`}
+              className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {filtered.slice(0, visibleCount).map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}
               {loadingMore && Array.from({ length: 3 }).map((_, i) => (
                 <CampaignCardSkeleton key={`loading-${i}`} />
               ))}
-            </div>
+            </motion.div>
             {visibleCount < filtered.length && !loadingMore && (
               <div className="mt-10 text-center">
                 <Button variant="outline" onClick={handleLoadMore} className="gap-2 border-border">
