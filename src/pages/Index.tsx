@@ -166,13 +166,13 @@ export default function Index() {
             <p className="mt-4 animate-fade-in-up text-base text-white/60 md:text-lg" style={{ animationDelay: "0.15s" }}>
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <Button asChild size="lg" className="h-12 gap-2 gradient-orange border-0 text-primary-foreground text-base hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+              <Button asChild size="lg" className="h-10 gap-2 gradient-orange border-0 text-primary-foreground text-sm hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
                 <Link to="/campaigns">
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild size="lg" className="h-12 bg-transparent border border-white/20 text-white text-base hover:bg-white/10 active:scale-[0.98] transition-transform">
+              <Button asChild size="lg" className="h-10 bg-transparent border border-white/20 text-white text-sm hover:bg-white/10 active:scale-[0.98] transition-transform">
                 <Link to="/create">Create Campaign</Link>
               </Button>
             </div>
