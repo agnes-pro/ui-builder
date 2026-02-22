@@ -95,6 +95,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-08-01"),
     endsAt: new Date("2025-11-01"),
     imageUrl: "https://images.unsplash.com/photo-1577415124269-fc1140a69e91?w=800&h=450&fit=crop",
+    category: "governance",
   },
   {
     id: 6,
