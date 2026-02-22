@@ -19,6 +19,15 @@ const prefersReducedMotion =
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const cardVariants = {
+  hidden: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+};
+
 export default function CampaignCard({ campaign }: { campaign: Campaign }) {
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
@@ -28,6 +37,7 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
       to={`/campaign/${campaign.id}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       aria-label={`Campaign: ${campaign.title}, ${progress}% funded`}
+      variants={cardVariants}
       whileHover={
         prefersReducedMotion
           ? undefined

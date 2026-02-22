@@ -158,14 +158,20 @@ export default function Campaigns() {
           </div>
         ) : (
           <>
-            <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
+            <motion.div
+              key={`${search}-${statusFilter}-${sortBy}`}
+              className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {filtered.slice(0, visibleCount).map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}
               {loadingMore && Array.from({ length: 3 }).map((_, i) => (
                 <CampaignCardSkeleton key={`loading-${i}`} />
               ))}
-            </div>
+            </motion.div>
             {visibleCount < filtered.length && !loadingMore && (
               <div className="mt-10 text-center">
                 <Button variant="outline" onClick={handleLoadMore} className="gap-2 border-border">

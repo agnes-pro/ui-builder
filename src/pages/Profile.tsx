@@ -115,9 +115,14 @@ export default function Profile() {
                 </Button>
               </div>
             ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div
+                className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 {myCampaigns.map((c) => <CampaignCard key={c.id} campaign={c} />)}
-              </div>
+              </motion.div>
             )}
           </TabsContent>
 
