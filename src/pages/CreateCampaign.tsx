@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import TransactionStatusModal, { TransactionStatus } from "@/components/TransactionStatusModal";
+import { useWallet } from "@/contexts/WalletContext";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const steps = ["Basic Info", "Funding Goal", "Milestones", "Review"];
 
@@ -24,6 +29,14 @@ export default function CreateCampaign() {
     { description: "", percentage: 50 },
     { description: "", percentage: 50 },
   ]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [txModalOpen, setTxModalOpen] = useState(false);
+  const [txStatus, setTxStatus] = useState<TransactionStatus>("signing");
+  const { wallet } = useWallet();
+
+  useEffect(() => {
+    document.title = "Create Campaign | sBTCFund";
+  }, []);
 
   const totalPercentage = milestones.reduce((sum, m) => sum + m.percentage, 0);
 
@@ -43,6 +56,28 @@ export default function CreateCampaign() {
     const updated = [...milestones];
     updated[index] = { ...updated[index], [field]: value };
     setMilestones(updated);
+    setErrors((e) => ({ ...e, [`milestone_${index}`]: "" }));
+  };
+
+  const validateStep = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    switch (step) {
+      case 0:
+        if (!title.trim()) newErrors.title = "Title is required";
+        if (!description.trim()) newErrors.description = "Description is required";
+        break;
+      case 1:
+        if (!goal || Number(goal) <= 0) newErrors.goal = "Enter a valid funding goal";
+        break;
+      case 2:
+        milestones.forEach((m, i) => {
+          if (!m.description.trim()) newErrors[`milestone_${i}`] = "Description required";
+        });
+        if (totalPercentage !== 100) newErrors.milestones = "Percentages must total 100%";
+        break;
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const canNext = () => {
@@ -54,9 +89,23 @@ export default function CreateCampaign() {
     }
   };
 
+  const handleNext = () => {
+    if (validateStep()) setStep(step + 1);
+  };
+
+  const handleLaunch = () => {
+    setTxStatus("signing");
+    setTxModalOpen(true);
+    setTimeout(() => setTxStatus("broadcasting"), 2000);
+    setTimeout(() => setTxStatus("pending"), 4000);
+    setTimeout(() => setTxStatus("success"), 6000);
+  };
+
   return (
     <Layout>
-      <div className="container max-w-2xl py-12">
+      <div className="container max-w-2xl py-12 animate-fade-in-up">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Create Campaign" }]} />
+
         <h1 className="font-display text-3xl font-bold">Create Campaign</h1>
         <p className="mt-2 text-muted-foreground">Launch your project on Bitcoin</p>
 
@@ -83,28 +132,34 @@ export default function CreateCampaign() {
             {step === 0 && (
               <div className="space-y-6">
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Campaign Title</label>
+                  <Label htmlFor="campaign-title" className="text-sm font-medium text-foreground mb-2 block">Campaign Title</Label>
                   <Input
+                    id="campaign-title"
                     placeholder="e.g. Decentralized Bitcoin Marketplace"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value.slice(0, 64))}
-                    className="bg-secondary border-border"
+                    onChange={(e) => { setTitle(e.target.value.slice(0, 64)); setErrors((er) => ({ ...er, title: "" })); }}
+                    className={`bg-secondary border-border ${errors.title ? "border-destructive" : ""}`}
                     maxLength={64}
+                    aria-invalid={!!errors.title}
                   />
+                  {errors.title && <p className="mt-1 text-xs text-destructive">{errors.title}</p>}
                   <p className="mt-1 text-xs text-muted-foreground">{title.length}/64 characters</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Description</label>
+                  <Label htmlFor="campaign-desc" className="text-sm font-medium text-foreground mb-2 block">Description</Label>
                   <textarea
+                    id="campaign-desc"
                     placeholder="Describe your project, goals, and how funds will be used..."
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => { setDescription(e.target.value); setErrors((er) => ({ ...er, description: "" })); }}
                     rows={6}
-                    className="flex w-full rounded-md border border-border bg-secondary px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className={`flex w-full rounded-md border bg-secondary px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.description ? "border-destructive" : "border-border"}`}
+                    aria-invalid={!!errors.description}
                   />
+                  {errors.description && <p className="mt-1 text-xs text-destructive">{errors.description}</p>}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Banner Image</label>
+                  <Label className="text-sm font-medium text-foreground mb-2 block">Banner Image</Label>
                   <div className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors">
                     <div className="text-center text-muted-foreground">
                       <ImagePlus className="mx-auto h-8 w-8 mb-2" />
@@ -119,17 +174,20 @@ export default function CreateCampaign() {
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Funding Goal</label>
+                  <Label htmlFor="funding-goal" className="text-sm font-medium text-foreground mb-2 block">Funding Goal</Label>
                   <div className="relative">
                     <Input
+                      id="funding-goal"
                       type="number"
                       placeholder="10000"
                       value={goal}
-                      onChange={(e) => setGoal(e.target.value)}
-                      className="pr-16 bg-secondary border-border text-lg font-mono"
+                      onChange={(e) => { setGoal(e.target.value); setErrors((er) => ({ ...er, goal: "" })); }}
+                      className={`pr-16 bg-secondary text-lg font-mono ${errors.goal ? "border-destructive" : "border-border"}`}
+                      aria-invalid={!!errors.goal}
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">STX</span>
                   </div>
+                  {errors.goal && <p className="mt-1 text-xs text-destructive">{errors.goal}</p>}
                   {Number(goal) > 0 && (
                     <p className="mt-2 text-sm text-muted-foreground">
                       ≈ ${(Number(goal) * 0.45).toLocaleString()} USD
@@ -137,9 +195,9 @@ export default function CreateCampaign() {
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Campaign Duration</label>
+                  <Label htmlFor="campaign-duration" className="text-sm font-medium text-foreground mb-2 block">Campaign Duration</Label>
                   <Select value={duration} onValueChange={setDuration}>
-                    <SelectTrigger className="bg-secondary border-border">
+                    <SelectTrigger className="bg-secondary border-border" id="campaign-duration">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-card border-border">
@@ -166,6 +224,7 @@ export default function CreateCampaign() {
                     {totalPercentage}%
                   </Badge>
                 </div>
+                {errors.milestones && <p className="text-xs text-destructive">{errors.milestones}</p>}
                 {milestones.map((m, i) => (
                   <div key={i} className="flex gap-3 items-start">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-muted-foreground/30 text-xs text-muted-foreground mt-1">
@@ -176,8 +235,11 @@ export default function CreateCampaign() {
                         placeholder={`Milestone ${i + 1} description`}
                         value={m.description}
                         onChange={(e) => updateMilestone(i, "description", e.target.value)}
-                        className="bg-secondary border-border"
+                        className={`bg-secondary ${errors[`milestone_${i}`] ? "border-destructive" : "border-border"}`}
+                        aria-label={`Milestone ${i + 1} description`}
+                        aria-invalid={!!errors[`milestone_${i}`]}
                       />
+                      {errors[`milestone_${i}`] && <p className="text-xs text-destructive">{errors[`milestone_${i}`]}</p>}
                       <div className="flex items-center gap-2">
                         <Input
                           type="number"
@@ -186,12 +248,13 @@ export default function CreateCampaign() {
                           className="w-24 bg-secondary border-border font-mono"
                           min={1}
                           max={100}
+                          aria-label={`Milestone ${i + 1} percentage`}
                         />
                         <span className="text-sm text-muted-foreground">%</span>
                       </div>
                     </div>
                     {milestones.length > 2 && (
-                      <Button variant="ghost" size="icon" onClick={() => removeMilestone(i)} className="text-muted-foreground hover:text-destructive mt-1">
+                      <Button variant="ghost" size="icon" onClick={() => removeMilestone(i)} className="text-muted-foreground hover:text-destructive mt-1" aria-label={`Remove milestone ${i + 1}`}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     )}
@@ -249,21 +312,47 @@ export default function CreateCampaign() {
               </Button>
               {step < 3 ? (
                 <Button
-                  onClick={() => setStep(step + 1)}
+                  onClick={handleNext}
                   disabled={!canNext()}
-                  className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90"
+                  className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-transform"
                 >
                   Next <ArrowRight className="h-4 w-4" />
                 </Button>
-              ) : (
-                <Button className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow">
+              ) : wallet.connected ? (
+                <Button
+                  onClick={handleLaunch}
+                  className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
+                >
                   🚀 Launch Campaign
                 </Button>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button disabled className="gap-2">
+                        🚀 Launch Campaign
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Connect your wallet to launch a campaign</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </div>
           </CardContent>
         </Card>
       </div>
+
+      <TransactionStatusModal
+        open={txModalOpen}
+        onOpenChange={setTxModalOpen}
+        status={txStatus}
+        campaignTitle={title}
+        txHash="0x7c2e...a1b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7"
+        onRetry={handleLaunch}
+        onClose={() => setTxModalOpen(false)}
+      />
     </Layout>
   );
 }
