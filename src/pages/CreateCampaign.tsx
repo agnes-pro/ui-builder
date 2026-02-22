@@ -98,6 +98,7 @@ export default function CreateCampaign() {
       case 0:
         if (!title.trim()) newErrors.title = "Title is required";
         if (!description.trim()) newErrors.description = "Description is required";
+        if (!category) newErrors.category = "Category is required";
         break;
       case 1:
         if (!goal || Number(goal) <= 0) newErrors.goal = "Enter a valid funding goal";
