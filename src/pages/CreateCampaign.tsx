@@ -230,6 +230,20 @@ export default function CreateCampaign() {
                     </div>
                   )}
                 </div>
+                <div>
+                  <Label htmlFor="campaign-category" className="text-sm font-medium text-foreground mb-2 block">Category</Label>
+                  <Select value={category} onValueChange={(v) => { setCategory(v as CampaignCategory); setErrors((er) => ({ ...er, category: "" })); }}>
+                    <SelectTrigger className={`bg-secondary ${errors.category ? "border-destructive" : "border-border"}`} id="campaign-category">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border">
+                      {CAMPAIGN_CATEGORIES.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.category && <p className="mt-1 text-xs text-destructive">{errors.category}</p>}
+                </div>
               </div>
             )}
 
