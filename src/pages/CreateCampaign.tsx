@@ -103,8 +103,9 @@ export default function CreateCampaign() {
   };
 
   return (
+    <PageTransition>
     <Layout>
-      <div className="container max-w-2xl py-12 animate-fade-in-up">
+      <div className="container max-w-2xl py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Create Campaign" }]} />
 
         <h1 className="font-display text-3xl font-bold">Create Campaign</h1>
