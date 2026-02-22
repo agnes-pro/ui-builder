@@ -102,7 +102,7 @@ export default function Campaigns() {
         title="Campaigns | sBTCFund"
         description="Explore and fund projects building on Bitcoin. Browse active campaigns on sBTCFund."
       />
-      <div className="container py-12">
+      <div className="container py-8">
         <PageHeader
           breadcrumbs={[{ label: "Home", href: "/" }, { label: "Campaigns" }]}
           title="Campaigns"
@@ -114,7 +114,7 @@ export default function Campaigns() {
         </PageHeader>
 
         {/* Filters */}
-        <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -186,7 +186,7 @@ export default function Campaigns() {
         </div>
         {/* Results */}
         {isLoading ? (
-          <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
+          <div className={`mt-6 grid gap-5 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
             {Array.from({ length: 6 }).map((_, i) => (
               <CampaignCardSkeleton key={i} />
             ))}
@@ -209,7 +209,7 @@ export default function Campaigns() {
           <>
             <motion.div
               key={`${debouncedSearch}-${statusFilter}-${sortBy}-${categoryFilter.join()}`}
-              className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+              className={`mt-6 grid gap-5 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
               variants={containerVariants}
               initial="hidden"
               animate="visible"
@@ -222,7 +222,7 @@ export default function Campaigns() {
               ))}
             </motion.div>
             {visibleCount < filtered.length && !loadingMore && (
-              <div className="mt-10 text-center">
+              <div className="mt-8 text-center">
                 <Button variant="outline" onClick={handleLoadMore} className="gap-2 border-border">
                   Load More Campaigns
                 </Button>
