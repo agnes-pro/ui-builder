@@ -248,7 +248,7 @@ export default function Index() {
         <div className="container">
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">Featured Campaigns</h2>
+              <h2 className="font-display text-2xl font-bold md:text-3xl">Featured Campaigns</h2>
               <p className="mt-2 text-muted-foreground">Discover projects building on Bitcoin</p>
             </div>
             <Button asChild variant="ghost" className="hidden gap-2 text-primary md:inline-flex">
