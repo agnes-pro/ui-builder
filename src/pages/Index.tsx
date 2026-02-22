@@ -91,7 +91,7 @@ export default function Index() {
       />
 
       {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative min-h-[80vh] flex items-center gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center gradient-hero overflow-hidden">
         {/* Grid pattern */}
         <div className="absolute inset-0 grid-pattern opacity-40" />
         {/* Mesh gradient blobs */}
