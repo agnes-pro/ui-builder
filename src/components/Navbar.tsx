@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Wallet, ChevronDown, LogOut, User, Copy } from "lucide-react";
+import { Menu, Wallet, ChevronDown, LogOut, User, Copy, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
 import { truncateAddress } from "@/data/mockData";
@@ -13,7 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
+import CommandMenu from "@/components/CommandMenu";
+import Identicon from "@/components/Identicon";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "next-themes";
 
 const navLinks = [
   { href: "/campaigns", label: "Campaigns" },
