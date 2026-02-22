@@ -142,6 +142,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
                     key={link.href}
                     to={link.href}
                     className="text-lg font-medium text-foreground hover:text-primary"
+                    onClick={() => setSheetOpen(false)}
                   >
                     {link.label}
                   </Link>
