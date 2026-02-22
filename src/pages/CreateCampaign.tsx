@@ -287,7 +287,7 @@ export default function CreateCampaign() {
                       onClick={() => fileInputRef.current?.click()}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={handleDrop}
-                      className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors"
+                      className="flex h-32 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors"
                     >
                       <div className="text-center text-muted-foreground">
                         <ImagePlus className="mx-auto h-8 w-8 mb-2" />
