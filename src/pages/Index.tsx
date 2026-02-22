@@ -239,7 +239,7 @@ export default function Index() {
 
       {/* Featured Campaigns */}
       <motion.section
-        className="py-16 bg-secondary/30"
+        className="py-12 bg-secondary/30"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
