@@ -209,10 +209,12 @@ export default function Index() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            viewport={{ once: true, amount: 0.05 }}
           >
-            {featured.map((campaign) => (
-              <CampaignCard key={campaign.id} campaign={campaign} />
+            {featured.map((campaign, index) => (
+              <div key={campaign.id} className={index >= 3 ? "hidden sm:block" : ""}>
+                <CampaignCard campaign={campaign} />
+              </div>
             ))}
           </motion.div>
           <div className="mt-4 text-center md:hidden">
