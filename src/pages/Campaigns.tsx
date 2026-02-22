@@ -102,7 +102,7 @@ export default function Campaigns() {
         title="Campaigns | sBTCFund"
         description="Explore and fund projects building on Bitcoin. Browse active campaigns on sBTCFund."
       />
-      <div className="container py-12">
+      <div className="container py-8">
         <PageHeader
           breadcrumbs={[{ label: "Home", href: "/" }, { label: "Campaigns" }]}
           title="Campaigns"
