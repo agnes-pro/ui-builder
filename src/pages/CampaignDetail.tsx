@@ -176,7 +176,7 @@ export default function CampaignDetail() {
               <h2 className="font-display text-lg font-semibold mb-4">Milestones</h2>
               <div className="space-y-4">
                 {campaign.milestones.map((milestone, i) => (
-                  <div key={milestone.id} className={`rounded-xl border p-5 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
+                  <div key={milestone.id} className={`rounded-xl border p-4 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
                     <div className="flex items-start gap-4">
                       <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${milestone.completed ? "bg-success text-success-foreground" : "border-2 border-muted-foreground/30 text-muted-foreground"}`}>
                         {milestone.completed ? <Check className="h-4 w-4 text-background" /> : <span className="text-xs font-semibold">{i + 1}</span>}
