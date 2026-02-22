@@ -273,7 +273,7 @@ export default function CreateCampaign() {
                   />
                   {imagePreview ? (
                     <div className="relative rounded-xl overflow-hidden border border-border">
-                      <img src={imagePreview} alt="Banner preview" className="h-40 w-full object-cover" />
+                      <img src={imagePreview} alt="Banner preview" className="h-32 w-full object-cover" />
                       <button
                         onClick={removeImage}
                         className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 text-muted-foreground backdrop-blur-sm hover:text-destructive transition-colors"
