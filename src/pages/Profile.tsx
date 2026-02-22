@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useWallet } from "@/contexts/WalletContext";
 import { mockCampaigns, mockContributions, mockActivities, truncateAddress, formatSTX } from "@/data/mockData";
@@ -12,6 +13,11 @@ import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw } fro
 import ConnectWalletModal from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 const activityIcons: Record<string, React.ElementType> = {
   created: Rocket,
