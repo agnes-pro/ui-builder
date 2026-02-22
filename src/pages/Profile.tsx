@@ -71,6 +71,7 @@ export default function Profile() {
   const myContributions = mockContributions.filter((c) => c.backer === wallet.address);
 
   return (
+    <PageTransition>
     <Layout>
       <div className="container py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "My Profile" }]} />
