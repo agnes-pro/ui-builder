@@ -178,10 +178,10 @@ export default function Index() {
             </div>
 
             {/* Stats */}
-            <div className="mt-12 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
+            <div className="mt-8 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="font-display text-3xl font-bold text-white md:text-4xl">
+                  <div className="font-display text-2xl font-bold text-white md:text-3xl">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="mt-1 text-sm text-white/60">{stat.label}</div>
