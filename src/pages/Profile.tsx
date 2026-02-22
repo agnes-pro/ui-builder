@@ -88,7 +88,7 @@ export default function Profile() {
 
         {/* Profile Header */}
         <div className="mt-6 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
-          <Identicon address={wallet.address!} size={64} className="rounded-2xl" />
+          <Identicon address={wallet.address!} size={48} className="rounded-2xl" />
           <div className="text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
               <Badge variant="outline" className="border-border font-mono text-xs">Testnet</Badge>
