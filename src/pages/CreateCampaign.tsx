@@ -231,7 +231,7 @@ export default function CreateCampaign() {
           <CardContent className="p-5">
             {/* Step 1: Basic Info */}
             {step === 0 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <Label htmlFor="campaign-title" className="text-sm font-medium text-foreground mb-2 block">Campaign Title</Label>
                   <Input
