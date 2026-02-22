@@ -3,6 +3,7 @@ import { Campaign } from "@/types/campaign";
 import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users } from "lucide-react";
+import ImageWithFallback from "@/components/ImageWithFallback";
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success border-success/30",
@@ -18,14 +19,16 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
   return (
     <Link
       to={`/campaign/${campaign.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/30 hover:glow-orange"
+      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:glow-orange hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      aria-label={`Campaign: ${campaign.title}, ${progress}% funded`}
     >
       {/* Image */}
       <div className="relative aspect-video overflow-hidden">
-        <img
+        <ImageWithFallback
           src={campaign.imageUrl}
           alt={campaign.title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fallbackClassName="h-full w-full"
           loading="lazy"
         />
         <div className="absolute top-3 left-3">
@@ -49,7 +52,7 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
         <div className="mt-auto space-y-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
             <div
-              className="h-full rounded-full gradient-orange transition-all duration-700"
+              className="h-full rounded-full gradient-orange transition-all duration-1000 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>

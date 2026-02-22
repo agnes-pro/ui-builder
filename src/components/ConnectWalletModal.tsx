@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
 import { Wallet, ExternalLink } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   open: boolean;
@@ -10,10 +11,12 @@ interface Props {
 
 export default function ConnectWalletModal({ open, onOpenChange }: Props) {
   const { connectWallet } = useWallet();
+  const { toast } = useToast();
 
   const handleConnect = (provider: "hiro" | "xverse") => {
     connectWallet(provider);
     onOpenChange(false);
+    toast({ title: "Wallet connected", description: `Connected via ${provider === "hiro" ? "Hiro" : "Xverse"} Wallet` });
   };
 
   return (
@@ -29,7 +32,7 @@ export default function ConnectWalletModal({ open, onOpenChange }: Props) {
         <div className="flex flex-col gap-3 pt-2">
           <Button
             onClick={() => handleConnect("hiro")}
-            className="h-14 justify-start gap-4 border border-border bg-secondary text-foreground hover:bg-secondary/80"
+            className="h-14 justify-start gap-4 border border-border bg-secondary text-foreground hover:bg-secondary/80 active:scale-[0.98] transition-transform"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
               <Wallet className="h-5 w-5 text-primary" />
@@ -42,7 +45,7 @@ export default function ConnectWalletModal({ open, onOpenChange }: Props) {
 
           <Button
             onClick={() => handleConnect("xverse")}
-            className="h-14 justify-start gap-4 border border-border bg-secondary text-foreground hover:bg-secondary/80"
+            className="h-14 justify-start gap-4 border border-border bg-secondary text-foreground hover:bg-secondary/80 active:scale-[0.98] transition-transform"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
               <Wallet className="h-5 w-5 text-accent" />
