@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Home, Search } from "lucide-react";
+import PageTransition from "@/components/PageTransition";
 
 const NotFound = () => {
   return (
