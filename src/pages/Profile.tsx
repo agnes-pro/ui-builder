@@ -148,7 +148,7 @@ export default function Profile() {
                 {myContributions.map((c) => {
                   const campaign = mockCampaigns.find((camp) => camp.id === c.campaignId);
                   return (
-                    <div key={c.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
+                    <div key={c.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-3.5 transition-colors hover:bg-secondary/50">
                       <div>
                         <p className="font-semibold text-foreground">{campaign?.title || "Unknown"}</p>
                         <p className="text-xs text-muted-foreground">{c.timestamp.toLocaleDateString()}</p>
