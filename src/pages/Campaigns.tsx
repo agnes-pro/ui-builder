@@ -71,8 +71,9 @@ export default function Campaigns() {
   }, [search, statusFilter, sortBy]);
 
   return (
+    <PageTransition>
     <Layout>
-      <div className="container py-12 animate-fade-in-up">
+      <div className="container py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns" }]} />
 
         {/* Header */}
