@@ -24,11 +24,11 @@ const prefersReducedMotion =
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const cardVariants = {
-  hidden: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
+  hidden: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeOut" as const },
+    transition: { duration: 0.35, ease: "easeOut" as const },
   },
 };
 
@@ -48,27 +48,26 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
   return (
     <MotionLink
       to={`/campaign/${campaign.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:border-primary/20"
       aria-label={`Campaign: ${campaign.title}, ${progress}% funded`}
       variants={cardVariants}
       whileHover={
         prefersReducedMotion
           ? undefined
           : {
-              y: -6,
-              scale: 1.02,
-              boxShadow: "0 20px 40px -12px hsl(var(--primary) / 0.15)",
+              y: -3,
+              boxShadow: "0 8px 24px -8px hsl(var(--primary) / 0.1)",
             }
       }
-      whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
       {/* Image */}
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden">
         <ImageWithFallback
           src={campaign.imageUrl}
           alt={campaign.title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           fallbackClassName="h-full w-full"
           loading="lazy"
         />
@@ -103,7 +102,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
         {/* Progress */}
         <div className="mt-auto space-y-2">
           <div
-            className="h-2 w-full overflow-hidden rounded-full bg-secondary"
+            className="h-1.5 w-full overflow-hidden rounded-full bg-secondary"
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin={0}
