@@ -246,10 +246,10 @@ export default function CampaignDetail() {
           </div>
 
           {/* Right sidebar */}
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
             {/* Funding Card */}
             <Card className="border-border bg-card">
-              <CardContent className="space-y-6 p-6">
+              <CardContent className="space-y-5 p-5">
                 <div>
                   <div className="flex items-baseline justify-between">
                     <span className="font-display text-3xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
