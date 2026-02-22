@@ -199,7 +199,7 @@ export default function CampaignDetail() {
             {/* Campaign Updates */}
             {updates.length > 0 && (
               <section>
-                <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-primary" /> Updates
                 </h2>
                 <div className="space-y-4">
