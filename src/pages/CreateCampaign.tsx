@@ -12,6 +12,8 @@ import TransactionStatusModal, { TransactionStatus } from "@/components/Transact
 import { useWallet } from "@/contexts/WalletContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import PageTransition from "@/components/PageTransition";
+import { CampaignCategory } from "@/types/campaign";
+import { CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 
 const steps = ["Basic Info", "Funding Goal", "Milestones", "Review"];
 
