@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import CampaignCard from "@/components/CampaignCard";
 import CampaignCardSkeleton from "@/components/skeletons/CampaignCardSkeleton";
@@ -10,6 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, Grid3X3, List, Plus, Loader2 } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 const ITEMS_PER_PAGE = 6;
 
