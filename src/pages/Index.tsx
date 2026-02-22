@@ -163,7 +163,7 @@ export default function Index() {
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
             </h1>
-            <p className="mt-4 animate-fade-in-up text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "0.15s" }}>
+            <p className="mt-4 animate-fade-in-up text-lg text-white/60 md:text-xl" style={{ animationDelay: "0.15s" }}>
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
