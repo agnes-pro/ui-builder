@@ -220,7 +220,7 @@ export default function CampaignDetail() {
             {/* Recent Backers */}
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display text-xl font-semibold">Recent Backers</h2>
+                <h2 className="font-display text-lg font-semibold">Recent Backers</h2>
                 {contributions.length > 0 && (
                   <button onClick={() => setBackersOpen(true)} className="text-xs text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring rounded">
                     View All
