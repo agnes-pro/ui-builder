@@ -80,7 +80,7 @@ export default function Campaigns() {
     }
 
     return result;
-  }, [campaigns, debouncedSearch, statusFilter, sortBy]);
+  }, [campaigns, debouncedSearch, statusFilter, sortBy, categoryFilter]);
 
   const handleLoadMore = useCallback(() => {
     setLoadingMore(true);
