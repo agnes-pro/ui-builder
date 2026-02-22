@@ -1,21 +1,18 @@
 
-# Fix Light Mode Hero Contrast
+
+# Fix Remaining Light Mode Hero Contrast Issues
 
 ## Problem
-The hero section uses a hardcoded dark gradient background (`gradient-hero`), but text classes like `text-foreground`, `text-muted-foreground`, and `border-border` switch to dark colors in light mode, making everything invisible against the dark background.
+Two elements in the hero section still have contrast issues in light mode:
 
-## Solution
-Force all hero section content to use light/white text regardless of theme, since the hero gradient is always dark.
+1. **The H1 heading ("Fund the Future of")** — missing `text-white` class, so it inherits `text-foreground` which is dark in light mode, making it nearly invisible against the dark gradient
+2. **The "Create Campaign" outline button** — while `text-white` is applied, the `variant="outline"` base styles from the Button component override it, making the text invisible on the white-styled button
 
-### Changes
+## Changes
 
 **File: `src/pages/Index.tsx`**
-- Replace theme-aware color classes inside the hero section with explicit light-on-dark colors:
-  - `text-foreground` -> `text-white`
-  - `text-muted-foreground` -> `text-white/60`
-  - `border-border` -> `border-white/20`
-  - `bg-secondary/50` -> `bg-white/10`
-  - Outline button: add `text-white border-white/20 hover:bg-white/10` instead of `border-border hover:bg-secondary`
-  - Scroll indicator: `text-white/50` instead of `text-muted-foreground`
 
-This ensures the hero always has proper contrast since its background is always the dark gradient, regardless of the active theme. No CSS variable changes needed -- only the hero section markup is affected.
+- **Line 162**: Add `text-white` to the `h1` element's className
+- **Line 175**: Add `!text-white` (with Tailwind's important modifier) to ensure it overrides the outline variant's default text color, or alternatively remove `variant="outline"` and style it manually with `bg-transparent`
+
+Both are one-line className additions — no structural changes needed.
