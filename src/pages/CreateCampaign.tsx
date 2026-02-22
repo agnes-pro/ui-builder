@@ -227,8 +227,8 @@ export default function CreateCampaign() {
           ))}
         </div>
 
-        <Card className="mt-8 border-border bg-card">
-          <CardContent className="p-6">
+        <Card className="mt-6 border-border bg-card">
+          <CardContent className="p-5">
             {/* Step 1: Basic Info */}
             {step === 0 && (
               <div className="space-y-6">
