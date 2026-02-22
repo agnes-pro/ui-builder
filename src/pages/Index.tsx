@@ -91,7 +91,7 @@ export default function Index() {
       />
 
       {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative min-h-[80vh] flex items-center gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center gradient-hero overflow-hidden">
         {/* Grid pattern */}
         <div className="absolute inset-0 grid-pattern opacity-40" />
         {/* Mesh gradient blobs */}
@@ -150,7 +150,7 @@ export default function Index() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container max-w-4xl">
           <div className="text-center">
@@ -162,7 +162,7 @@ export default function Index() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.05 }}
           >
             {howItWorks.map((step) => (
               <motion.div
@@ -192,7 +192,7 @@ export default function Index() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container">
           <div className="flex items-end justify-between">
@@ -209,10 +209,12 @@ export default function Index() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            viewport={{ once: true, amount: 0.05 }}
           >
-            {featured.map((campaign) => (
-              <CampaignCard key={campaign.id} campaign={campaign} />
+            {featured.map((campaign, index) => (
+              <div key={campaign.id} className={index >= 3 ? "hidden sm:block" : ""}>
+                <CampaignCard campaign={campaign} />
+              </div>
             ))}
           </motion.div>
           <div className="mt-4 text-center md:hidden">
@@ -229,7 +231,7 @@ export default function Index() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container max-w-4xl">
           <div className="text-center">
@@ -239,11 +241,11 @@ export default function Index() {
             </h2>
           </div>
           <motion.div
-            className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.05 }}
           >
             {trustIndicators.map((item) => (
               <motion.div
