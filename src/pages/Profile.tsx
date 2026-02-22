@@ -41,8 +41,9 @@ export default function Profile() {
 
   if (!wallet.connected) {
     return (
+      <PageTransition>
       <Layout>
-        <div className="container py-20 text-center animate-fade-in-up">
+        <div className="container py-20 text-center">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary">
             <Wallet className="h-10 w-10 text-muted-foreground" />
           </div>
