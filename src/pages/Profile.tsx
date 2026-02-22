@@ -106,7 +106,7 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="campaigns" className="mt-10">
+        <Tabs defaultValue="campaigns" className="mt-8">
           <TabsList className="bg-secondary border border-border">
             <TabsTrigger value="campaigns">My Campaigns</TabsTrigger>
             <TabsTrigger value="contributions">My Contributions</TabsTrigger>
