@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { mockCampaigns, mockContributions, mockUpdates, truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
+import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
 import { getProgressColor } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,15 +8,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useWallet } from "@/contexts/WalletContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ContributeModal from "@/components/ContributeModal";
 import TransactionStatusModal, { TransactionStatus } from "@/components/TransactionStatusModal";
+import SEOHead from "@/components/SEOHead";
+import ErrorState from "@/components/ErrorState";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CampaignDetailSkeleton from "@/components/skeletons/CampaignDetailSkeleton";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import { ArrowLeft, Calendar, Check, Clock, Copy, ExternalLink, FileText, MessageSquare, Share2, User, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
+import { useCampaign, useCampaignContributions, useCampaignUpdates } from "@/hooks/useCampaigns";
 
 const statusColors: Record<string, string> = {
   active: "bg-success/20 text-success border-success/30",
@@ -27,7 +30,11 @@ const statusColors: Record<string, string> = {
 
 export default function CampaignDetail() {
   const { id } = useParams();
-  const campaign = mockCampaigns.find((c) => c.id === Number(id));
+  const campaignId = Number(id);
+  const { data: campaign, isLoading, isError, refetch } = useCampaign(campaignId);
+  const { data: contributions = [] } = useCampaignContributions(campaignId);
+  const { data: updates = [] } = useCampaignUpdates(campaignId);
+
   const [contributeOpen, setContributeOpen] = useState(false);
   const [txModalOpen, setTxModalOpen] = useState(false);
   const [txStatus, setTxStatus] = useState<TransactionStatus>("signing");
@@ -35,13 +42,6 @@ export default function CampaignDetail() {
   const [backersOpen, setBackersOpen] = useState(false);
   const { wallet } = useWallet();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    document.title = campaign ? `${campaign.title} | sBTCFund` : "Campaign | sBTCFund";
-    const t = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(t);
-  }, [campaign]);
 
   const copyCreatorAddress = async () => {
     if (campaign) {
@@ -60,6 +60,26 @@ export default function CampaignDetail() {
     setTimeout(() => setTxStatus("success"), 6000);
   };
 
+  if (isError) {
+    return (
+      <Layout>
+        <ErrorState
+          title="Failed to load campaign"
+          description="We couldn't load this campaign. Please try again."
+          onRetry={() => refetch()}
+        />
+      </Layout>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <CampaignDetailSkeleton />
+      </Layout>
+    );
+  }
+
   if (!campaign) {
     return (
       <Layout>
@@ -73,27 +93,23 @@ export default function CampaignDetail() {
     );
   }
 
-  if (loading) {
-    return (
-      <Layout>
-        <CampaignDetailSkeleton />
-      </Layout>
-    );
-  }
-
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
-  const contributions = mockContributions.filter((c) => c.campaignId === campaign.id);
-  const updates = mockUpdates.filter((u) => u.campaignId === campaign.id);
   const completedMilestones = campaign.milestones.filter((m) => m.completed).length;
   const creatorInitials = campaign.creator.slice(0, 2).toUpperCase();
 
   return (
     <PageTransition>
     <Layout>
+      <SEOHead
+        title={`${campaign.title} | sBTCFund`}
+        description={campaign.description.slice(0, 155)}
+        ogType="article"
+      />
+
       {/* Banner */}
       <div className="relative h-64 w-full overflow-hidden md:h-80">
-        <ImageWithFallback src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" fallbackClassName="h-full w-full" />
+        <ImageWithFallback src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" fallbackClassName="h-full w-full" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
@@ -144,7 +160,7 @@ export default function CampaignDetail() {
                     <span className="flex items-center gap-1"><User className="h-3 w-3" /> Member since {campaign.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span>
                     <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> 3 campaigns</span>
                   </div>
-                  <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                  <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline" rel="noopener noreferrer">
                     <ExternalLink className="h-3 w-3" /> View on Explorer
                   </a>
                 </div>

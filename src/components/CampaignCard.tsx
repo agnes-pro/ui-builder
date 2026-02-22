@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Campaign } from "@/types/campaign";
@@ -30,7 +31,7 @@ const cardVariants = {
   },
 };
 
-export default function CampaignCard({ campaign }: { campaign: Campaign }) {
+const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campaign }) {
   const progress = getProgressPercentage(campaign.raisedAmount, campaign.goalAmount);
   const daysLeft = getDaysLeft(campaign.endsAt);
   const { toast } = useToast();
@@ -132,4 +133,6 @@ export default function CampaignCard({ campaign }: { campaign: Campaign }) {
       </div>
     </MotionLink>
   );
-}
+});
+
+export default CampaignCard;

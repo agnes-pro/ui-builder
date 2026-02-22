@@ -1,16 +1,20 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import CampaignCard from "@/components/CampaignCard";
 import CampaignCardSkeleton from "@/components/skeletons/CampaignCardSkeleton";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import { mockCampaigns } from "@/data/mockData";
+import PageHeader from "@/components/PageHeader";
+import SEOHead from "@/components/SEOHead";
+import ErrorState from "@/components/ErrorState";
+import EmptyState from "@/components/EmptyState";
+import { useCampaigns } from "@/hooks/useCampaigns";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Grid3X3, List, Plus, Loader2 } from "lucide-react";
+import { Search, Grid3X3, List, Plus } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
+import { useEffect, useRef } from "react";
 
 const containerVariants = {
   hidden: {},
@@ -21,24 +25,33 @@ const ITEMS_PER_PAGE = 6;
 
 export default function Campaigns() {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loadingMore, setLoadingMore] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const { data: campaigns, isLoading, isError, refetch } = useCampaigns();
+
+  // Debounce search
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => setDebouncedSearch(value), 300);
+  }, []);
 
   useEffect(() => {
-    document.title = "Campaigns | sBTCFund";
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
+    return () => clearTimeout(debounceRef.current);
   }, []);
 
   const filtered = useMemo(() => {
-    let result = [...mockCampaigns];
+    if (!campaigns) return [];
+    let result = [...campaigns];
 
-    if (search) {
-      const q = search.toLowerCase();
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase();
       result = result.filter((c) => c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q));
     }
 
@@ -61,37 +74,38 @@ export default function Campaigns() {
     }
 
     return result;
-  }, [search, statusFilter, sortBy]);
+  }, [campaigns, debouncedSearch, statusFilter, sortBy]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     setLoadingMore(true);
     setTimeout(() => {
       setVisibleCount((c) => c + ITEMS_PER_PAGE);
       setLoadingMore(false);
     }, 500);
-  };
+  }, []);
 
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [search, statusFilter, sortBy]);
+  }, [debouncedSearch, statusFilter, sortBy]);
 
   return (
     <PageTransition>
     <Layout>
+      <SEOHead
+        title="Campaigns | sBTCFund"
+        description="Explore and fund projects building on Bitcoin. Browse active campaigns on sBTCFund."
+      />
       <div className="container py-12">
-        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns" }]} />
-
-        {/* Header */}
-        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="font-display text-3xl font-bold md:text-4xl">Campaigns</h1>
-            <p className="mt-2 text-muted-foreground">Explore and fund projects building on Bitcoin</p>
-          </div>
+        <PageHeader
+          breadcrumbs={[{ label: "Home", href: "/" }, { label: "Campaigns" }]}
+          title="Campaigns"
+          description="Explore and fund projects building on Bitcoin"
+        >
           <Button asChild className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-transform">
             <Link to="/create"><Plus className="h-4 w-4" /> Create Campaign</Link>
           </Button>
-        </div>
+        </PageHeader>
 
         {/* Filters */}
         <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-center">
@@ -100,7 +114,7 @@ export default function Campaigns() {
             <Input
               placeholder="Search campaigns..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 bg-secondary border-border"
               aria-label="Search campaigns"
             />
@@ -139,27 +153,30 @@ export default function Campaigns() {
         </div>
 
         {/* Results */}
-        {loading ? (
+        {isLoading ? (
           <div className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
             {Array.from({ length: 6 }).map((_, i) => (
               <CampaignCardSkeleton key={i} />
             ))}
           </div>
+        ) : isError ? (
+          <ErrorState
+            title="Failed to load campaigns"
+            description="We couldn't load the campaigns. Please try again."
+            onRetry={() => refetch()}
+          />
         ) : filtered.length === 0 ? (
-          <div className="mt-20 text-center">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary">
-              <Search className="h-10 w-10 text-muted-foreground" />
-            </div>
-            <h3 className="font-display text-xl font-semibold">No campaigns found</h3>
-            <p className="mt-2 text-muted-foreground">Try adjusting your filters or create a new campaign</p>
-            <Button asChild className="mt-6 gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90">
-              <Link to="/create"><Plus className="h-4 w-4" /> Create Campaign</Link>
-            </Button>
-          </div>
+          <EmptyState
+            icon={Search}
+            title="No campaigns found"
+            description="Try adjusting your filters or create a new campaign"
+            actionLabel="Create Campaign"
+            actionHref="/create"
+          />
         ) : (
           <>
             <motion.div
-              key={`${search}-${statusFilter}-${sortBy}`}
+              key={`${debouncedSearch}-${statusFilter}-${sortBy}`}
               className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
               variants={containerVariants}
               initial="hidden"
