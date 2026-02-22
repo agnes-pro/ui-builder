@@ -315,7 +315,7 @@ export default function CreateCampaign() {
 
             {/* Step 2: Funding Goal */}
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <Label htmlFor="funding-goal" className="text-sm font-medium text-foreground mb-2 block">Funding Goal</Label>
                   <div className="relative">
