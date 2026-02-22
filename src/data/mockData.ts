@@ -76,6 +76,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2026-01-20"),
     endsAt: new Date("2026-04-20"),
     imageUrl: "https://images.unsplash.com/photo-1634973357973-f2ed2657db3c?w=800&h=450&fit=crop",
+    category: "nft",
   },
   {
     id: 5,
