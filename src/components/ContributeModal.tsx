@@ -57,7 +57,7 @@ export default function ContributeModal({ open, onOpenChange, campaign, onContri
               <span className="text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-              <div className="h-full rounded-full gradient-orange transition-all duration-700" style={{ width: `${progress}%` }} />
+              <div className={`h-full rounded-full ${getProgressColor(progress)} transition-all duration-700`} style={{ width: `${progress}%` }} />
             </div>
           </div>
 
