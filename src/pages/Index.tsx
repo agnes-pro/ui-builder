@@ -97,6 +97,7 @@ export default function Index() {
   }, []);
 
   return (
+    <PageTransition>
     <Layout>
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center mesh-gradient gradient-hero">
