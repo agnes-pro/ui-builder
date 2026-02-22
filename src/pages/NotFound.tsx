@@ -30,6 +30,7 @@ const NotFound = () => {
         </div>
       </div>
     </Layout>
+    </PageTransition>
   );
 };
 

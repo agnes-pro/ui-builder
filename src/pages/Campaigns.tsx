@@ -171,5 +171,6 @@ export default function Campaigns() {
         )}
       </div>
     </Layout>
+    </PageTransition>
   );
 }

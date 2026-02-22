@@ -356,5 +356,6 @@ export default function CreateCampaign() {
         onClose={() => setTxModalOpen(false)}
       />
     </Layout>
+    </PageTransition>
   );
 }

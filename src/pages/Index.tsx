@@ -260,5 +260,6 @@ export default function Index() {
         </div>
       </footer>
     </Layout>
+    </PageTransition>
   );
 }

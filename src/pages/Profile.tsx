@@ -181,5 +181,6 @@ export default function Profile() {
         </Tabs>
       </div>
     </Layout>
+    </PageTransition>
   );
 }
