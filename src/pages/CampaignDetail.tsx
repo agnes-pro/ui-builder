@@ -347,7 +347,9 @@ export default function CampaignDetail() {
                   )}
                 </CardContent>
               </Card>
-            )}
+                );
+              })()
+            }
           </div>
         </div>
       </div>

@@ -91,7 +91,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="gap-2 border-border bg-secondary font-mono text-sm">
-                    <div className="h-2 w-2 rounded-full bg-success" />
+                    <Identicon address={wallet.address} size={20} />
                     {truncateAddress(wallet.address)}
                     <ChevronDown className="h-3 w-3" />
                   </Button>
