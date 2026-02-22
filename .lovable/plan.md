@@ -1,61 +1,40 @@
 
-
-# Add Framer Motion Page Transition Animations
+# Add Framer Motion Hover Animations to CampaignCard
 
 ## Overview
-Add smooth, performant page transition animations using `framer-motion` so navigating between routes feels fluid and polished. This replaces the current CSS-only `animate-fade-in-up` approach with proper enter/exit route-level transitions.
+Replace the current CSS-only hover effects on CampaignCard with framer-motion's `motion` components for richer, more fluid micro-interactions including scale, shadow lift, and image zoom.
 
 ## Current State
-- Pages currently use a CSS class `animate-fade-in-up` on their root container
-- There are no exit animations when leaving a page
-- Route changes feel abrupt -- content just swaps instantly
+The card already has CSS hover effects:
+- `hover:-translate-y-1` (lift)
+- `hover:shadow-lg hover:shadow-primary/5` (shadow)
+- `hover:border-primary/30` (border glow)
+- `group-hover:scale-105` on the image (zoom)
 
-## Implementation
+These work but feel mechanical. Framer-motion provides spring physics and `whileHover`/`whileTap` for smoother, more natural interactions.
 
-### 1. Install framer-motion
-Add `framer-motion` as a dependency.
+## Changes
 
-### 2. Create a PageTransition wrapper component
-**New file: `src/components/PageTransition.tsx`**
+### File: `src/components/CampaignCard.tsx`
 
-A reusable wrapper using `motion.div` with:
-- **Enter**: fade in + slide up (opacity 0 -> 1, y: 20px -> 0)
-- **Exit**: fade out + slight slide down (opacity 1 -> 0, y: -10px)
-- Duration: 300ms ease-out for enter, 200ms for exit
-- Respects `prefers-reduced-motion` -- instantly shows content without animation
+**What changes:**
+1. Import `motion` from `framer-motion`
+2. Replace the outer `<Link>` with a `motion(Link)` wrapper (or wrap Link content in `motion.div`)
+3. Add `whileHover` animation: `{ y: -6, scale: 1.02 }` with spring transition
+4. Add `whileTap` animation: `{ scale: 0.98 }` for click feedback
+5. Add animated box shadow on hover via framer-motion's `boxShadow` property
+6. Replace the CSS `group-hover:scale-105` on the image with a framer-motion approach using the `group` hover state
+7. Remove redundant CSS hover classes (`hover:-translate-y-1`, `hover:shadow-lg`, etc.) since framer-motion handles them
+8. Respect `prefers-reduced-motion` by checking the media query and disabling animations accordingly
 
-### 3. Add AnimatePresence to App.tsx
-- Import `AnimatePresence` from framer-motion
-- Extract routes into a component that uses `useLocation()` to provide a `key` prop
-- Wrap `<Routes>` with `<AnimatePresence mode="wait">` so exit animations complete before enter animations begin
+**Technical approach:**
+- Use `motion.create(Link)` to create a motion-compatible Link component
+- Use `whileHover` and `whileTap` props for the card-level animations
+- Use `transition: { type: "spring", stiffness: 300, damping: 20 }` for natural bounce
+- Keep the CSS `transition-colors` for the title color change (simpler to leave as CSS)
+- Keep the image zoom as CSS `group-hover:scale-105` since it depends on the group hover context
 
-### 4. Wrap each page with PageTransition
-Update all 6 page components to wrap their content in `<PageTransition>`:
-- `src/pages/Index.tsx`
-- `src/pages/Campaigns.tsx`
-- `src/pages/CampaignDetail.tsx`
-- `src/pages/CreateCampaign.tsx`
-- `src/pages/Profile.tsx`
-- `src/pages/NotFound.tsx`
+### Files to Modify
+1. `src/components/CampaignCard.tsx` -- add framer-motion hover/tap animations
 
-Remove the existing `animate-fade-in-up` CSS class from each page's root div since framer-motion handles this now.
-
-## Technical Details
-
-### Files to Create (1)
-- `src/components/PageTransition.tsx`
-
-### Files to Modify (7)
-- `src/App.tsx` -- add AnimatePresence + useLocation key
-- `src/pages/Index.tsx` -- wrap with PageTransition, remove CSS animation class
-- `src/pages/Campaigns.tsx` -- wrap with PageTransition, remove CSS animation class
-- `src/pages/CampaignDetail.tsx` -- wrap with PageTransition, remove CSS animation class
-- `src/pages/CreateCampaign.tsx` -- wrap with PageTransition, remove CSS animation class
-- `src/pages/Profile.tsx` -- wrap with PageTransition, remove CSS animation class
-- `src/pages/NotFound.tsx` -- wrap with PageTransition
-
-### Key Design Decisions
-- Using `mode="wait"` on AnimatePresence so the old page fades out before the new one fades in (prevents layout overlap)
-- The PageTransition component checks `window.matchMedia('(prefers-reduced-motion: reduce)')` and skips animations accordingly
-- Keeping transitions subtle (300ms) to feel smooth without slowing navigation
-
+### No new files needed
