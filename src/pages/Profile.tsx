@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CampaignCard from "@/components/CampaignCard";
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import SEOHead from "@/components/SEOHead";
+import EmptyState from "@/components/EmptyState";
+import PageHeader from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw } from "lucide-react";
+import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw, FolderOpen } from "lucide-react";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
@@ -33,7 +35,6 @@ export default function Profile() {
   const { toast } = useToast();
 
   useEffect(() => {
-    document.title = "My Profile | sBTCFund";
     const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
@@ -49,17 +50,15 @@ export default function Profile() {
     return (
       <PageTransition>
       <Layout>
-        <div className="container py-20 text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-secondary">
-            <Wallet className="h-10 w-10 text-muted-foreground" />
-          </div>
-          <h2 className="font-display text-2xl font-bold">Connect Your Wallet</h2>
-          <p className="mt-2 text-muted-foreground">Connect your wallet to view your profile and campaigns</p>
-          <Button onClick={() => setConnectOpen(true)} className="mt-6 gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90 active:scale-[0.98] transition-transform">
-            <Wallet className="h-4 w-4" /> Connect Wallet
-          </Button>
-          <ConnectWalletModal open={connectOpen} onOpenChange={setConnectOpen} />
-        </div>
+        <SEOHead title="My Profile | sBTCFund" description="View your sBTCFund profile, campaigns, and contributions." />
+        <EmptyState
+          icon={Wallet}
+          title="Connect Your Wallet"
+          description="Connect your wallet to view your profile and campaigns"
+          actionLabel="Connect Wallet"
+          onAction={() => setConnectOpen(true)}
+        />
+        <ConnectWalletModal open={connectOpen} onOpenChange={setConnectOpen} />
       </Layout>
       </PageTransition>
     );
@@ -79,22 +78,25 @@ export default function Profile() {
   return (
     <PageTransition>
     <Layout>
+      <SEOHead title="My Profile | sBTCFund" description="View your sBTCFund profile, campaigns, and contributions." />
       <div className="container py-12">
-        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "My Profile" }]} />
+        <PageHeader
+          breadcrumbs={[{ label: "Home", href: "/" }, { label: "My Profile" }]}
+          title={truncateAddress(wallet.address!)}
+        />
 
         {/* Profile Header */}
-        <div className="flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
+        <div className="mt-6 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-orange text-2xl font-bold text-primary-foreground">
             {wallet.address?.slice(2, 4).toUpperCase()}
           </div>
           <div className="text-center md:text-left">
-            <h1 className="font-display text-2xl font-bold">{truncateAddress(wallet.address!)}</h1>
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-2 md:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
               <Badge variant="outline" className="border-border font-mono text-xs">Testnet</Badge>
               <button onClick={copyAddress} className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="Copy wallet address">
                 <Copy className="h-3 w-3" /> Copy
               </button>
-              <a href="#" className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
+              <a href="#" className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1" rel="noopener noreferrer">
                 <ExternalLink className="h-3 w-3" /> Explorer
               </a>
             </div>
@@ -114,12 +116,13 @@ export default function Profile() {
 
           <TabsContent value="campaigns" className="mt-6">
             {myCampaigns.length === 0 ? (
-              <div className="py-16 text-center">
-                <p className="text-muted-foreground">You haven't created any campaigns yet</p>
-                <Button asChild className="mt-4 gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90">
-                  <a href="/create">Create Your First Campaign</a>
-                </Button>
-              </div>
+              <EmptyState
+                icon={FolderOpen}
+                title="No campaigns yet"
+                description="You haven't created any campaigns yet"
+                actionLabel="Create Your First Campaign"
+                actionHref="/create"
+              />
             ) : (
               <motion.div
                 className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -134,12 +137,13 @@ export default function Profile() {
 
           <TabsContent value="contributions" className="mt-6">
             {myContributions.length === 0 ? (
-              <div className="py-16 text-center">
-                <p className="text-muted-foreground">You haven't contributed to any campaigns yet</p>
-                <Button asChild className="mt-4 gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90">
-                  <a href="/campaigns">Explore Campaigns</a>
-                </Button>
-              </div>
+              <EmptyState
+                icon={Coins}
+                title="No contributions yet"
+                description="You haven't contributed to any campaigns yet"
+                actionLabel="Explore Campaigns"
+                actionHref="/campaigns"
+              />
             ) : (
               <div className="space-y-3">
                 {myContributions.map((c) => {
@@ -181,7 +185,7 @@ export default function Profile() {
                         )}
                       </div>
                     </div>
-                    <a href="#" className="text-xs text-muted-foreground hover:text-primary" aria-label="View on explorer">
+                    <a href="#" className="text-xs text-muted-foreground hover:text-primary" aria-label="View on explorer" rel="noopener noreferrer">
                       <ExternalLink className="h-3.5 w-3.5" />
                     </a>
                   </div>
