@@ -192,7 +192,7 @@ export default function Index() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container">
           <div className="flex items-end justify-between">
