@@ -61,6 +61,10 @@ export default function Campaigns() {
       result = result.filter((c) => c.status === statusFilter);
     }
 
+    if (categoryFilter.length > 0) {
+      result = result.filter((c) => categoryFilter.includes(c.category));
+    }
+
     switch (sortBy) {
       case "most-funded":
         result.sort((a, b) => b.raisedAmount - a.raisedAmount);
