@@ -13,6 +13,7 @@ import PageHeader from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw, FolderOpen } from "lucide-react";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
+import Identicon from "@/components/Identicon";
 import { useToast } from "@/hooks/use-toast";
 import PageTransition from "@/components/PageTransition";
 
@@ -87,9 +88,7 @@ export default function Profile() {
 
         {/* Profile Header */}
         <div className="mt-6 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-orange text-2xl font-bold text-primary-foreground">
-            {wallet.address?.slice(2, 4).toUpperCase()}
-          </div>
+          <Identicon address={wallet.address!} size={64} className="rounded-2xl" />
           <div className="text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
               <Badge variant="outline" className="border-border font-mono text-xs">Testnet</Badge>

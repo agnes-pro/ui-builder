@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Wallet, ChevronDown, LogOut, User, Copy } from "lucide-react";
+import { Menu, Wallet, ChevronDown, LogOut, User, Copy, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
 import { truncateAddress } from "@/data/mockData";
@@ -13,7 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
+import CommandMenu from "@/components/CommandMenu";
+import Identicon from "@/components/Identicon";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "next-themes";
 
 const navLinks = [
   { href: "/campaigns", label: "Campaigns" },
@@ -24,8 +27,10 @@ const navLinks = [
 export default function Navbar({ scrolled }: { scrolled?: boolean }) {
   const { wallet, disconnectWallet } = useWallet();
   const [connectOpen, setConnectOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const location = useLocation();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   const copyAddress = async () => {
     if (wallet.address) {
@@ -72,11 +77,21 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
 
           {/* Wallet / CTA */}
           <div className="hidden items-center gap-3 md:flex">
+            <CommandMenu />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label="Toggle theme"
+            >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </Button>
             {wallet.connected && wallet.address ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="gap-2 border-border bg-secondary font-mono text-sm">
-                    <div className="h-2 w-2 rounded-full bg-success" />
+                    <Identicon address={wallet.address} size={20} />
                     {truncateAddress(wallet.address)}
                     <ChevronDown className="h-3 w-3" />
                   </Button>
@@ -104,7 +119,17 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
           </div>
 
           {/* Mobile hamburger */}
-          <Sheet>
+          <div className="flex items-center gap-2 md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label="Toggle theme"
+            >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </Button>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
@@ -117,6 +142,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
                     key={link.href}
                     to={link.href}
                     className="text-lg font-medium text-foreground hover:text-primary"
+                    onClick={() => setSheetOpen(false)}
                   >
                     {link.label}
                   </Link>
@@ -127,7 +153,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
                       <LogOut className="h-4 w-4" /> Disconnect
                     </Button>
                   ) : (
-                    <Button onClick={() => setConnectOpen(true)} className="w-full gap-2 gradient-orange border-0 text-primary-foreground">
+                    <Button onClick={() => { setConnectOpen(true); setSheetOpen(false); }} className="w-full gap-2 gradient-orange border-0 text-primary-foreground">
                       <Wallet className="h-4 w-4" /> Connect Wallet
                     </Button>
                   )}
@@ -135,6 +161,7 @@ export default function Navbar({ scrolled }: { scrolled?: boolean }) {
               </div>
             </SheetContent>
           </Sheet>
+          </div>
         </div>
       </nav>
 

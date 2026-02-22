@@ -6,6 +6,61 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 220 20% 14%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 220 20% 14%;
+
+    --popover: 0 0% 98%;
+    --popover-foreground: 220 20% 14%;
+
+    --primary: 33 93% 54%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 220 20% 14%;
+
+    --muted: 220 14% 93%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 263 70% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 33 93% 54%;
+
+    --radius: 0.75rem;
+
+    /* Brand colors */
+    --bitcoin-orange: 33 93% 54%;
+    --deep-space: 220 20% 14%;
+    --cosmic-purple: 263 70% 58%;
+    --electric-cyan: 187 92% 55%;
+    --success-green: 142 71% 45%;
+    --warning-amber: 38 92% 50%;
+    --error-red: 0 84% 60%;
+
+    /* Glass effect */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 220 13% 87% / 0.5;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 20% 14%;
+    --sidebar-primary: 33 93% 54%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 93%;
+    --sidebar-accent-foreground: 220 20% 14%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 33 93% 54%;
+  }
+
+  .dark {
     --background: 216 28% 7%;
     --foreground: 210 40% 98%;
 
@@ -33,8 +88,6 @@
     --border: 220 20% 18%;
     --input: 220 20% 18%;
     --ring: 33 93% 54%;
-
-    --radius: 0.75rem;
 
     /* Brand colors */
     --bitcoin-orange: 33 93% 54%;

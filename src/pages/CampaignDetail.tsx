@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { categoryColors, CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
-import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
+import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage, mockCampaigns, mockContributions } from "@/data/mockData";
 import { getProgressColor } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -162,7 +162,7 @@ export default function CampaignDetail() {
                   <p className="font-mono text-sm text-foreground">{truncateAddress(campaign.creator)}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><User className="h-3 w-3" /> Member since {campaign.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span>
-                    <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> 3 campaigns</span>
+                    <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {mockCampaigns.filter(c => c.creator === campaign.creator).length} campaigns</span>
                   </div>
                   <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline" rel="noopener noreferrer">
                     <ExternalLink className="h-3 w-3" /> View on Explorer
@@ -326,14 +326,19 @@ export default function CampaignDetail() {
             </Card>
 
             {/* Your Contribution */}
-            {wallet.connected && (
+            {wallet.connected && (() => {
+                const myContrib = mockContributions.filter(c => c.backer === wallet.address && c.campaignId === campaign.id);
+                const totalContrib = myContrib.reduce((sum, c) => sum + c.amount, 0);
+                const latestContrib = myContrib[0];
+                if (totalContrib === 0) return null;
+                return (
               <Card className="border-primary/20 bg-card">
                 <CardHeader className="pb-3">
                   <CardTitle className="font-display text-base">Your Contribution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="font-display text-2xl font-bold text-primary">500 STX</p>
-                  <p className="text-xs text-muted-foreground mt-1">Contributed on Feb 20, 2026</p>
+                  <p className="font-display text-2xl font-bold text-primary">{formatSTX(totalContrib)} STX</p>
+                  <p className="text-xs text-muted-foreground mt-1">Contributed on {latestContrib?.timestamp.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                   {campaign.status === "failed" && (
                     <Button variant="outline" size="sm" className="mt-4 w-full border-destructive text-destructive hover:bg-destructive/10">
                       Claim Refund
@@ -341,7 +346,8 @@ export default function CampaignDetail() {
                   )}
                 </CardContent>
               </Card>
-            )}
+                );
+              })()}
           </div>
         </div>
       </div>
