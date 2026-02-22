@@ -72,9 +72,12 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
           fallbackClassName="h-full w-full"
           loading="lazy"
         />
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 flex gap-1.5">
           <Badge className={`${statusColors[campaign.status]} border text-xs capitalize`}>
             {campaign.status}
+          </Badge>
+          <Badge className={`${categoryColors[campaign.category]} border text-xs`}>
+            {CAMPAIGN_CATEGORIES.find(c => c.value === campaign.category)?.label}
           </Badge>
         </div>
         {/* Share button on hover */}

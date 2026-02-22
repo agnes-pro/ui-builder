@@ -123,6 +123,9 @@ export default function CampaignDetail() {
 
         <div className="flex flex-wrap items-start gap-3">
           <Badge className={`${statusColors[campaign.status]} border capitalize`}>{campaign.status}</Badge>
+          <Badge className={`${categoryColors[campaign.category]} border text-xs`}>
+            {CAMPAIGN_CATEGORIES.find(c => c.value === campaign.category)?.label}
+          </Badge>
           <span className="flex items-center gap-1 text-sm text-muted-foreground">
             <Calendar className="h-3.5 w-3.5" />
             Created {campaign.createdAt.toLocaleDateString()}
