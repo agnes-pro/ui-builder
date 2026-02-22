@@ -431,7 +431,7 @@ export default function CreateCampaign() {
 
             {/* Step 4: Review */}
             {step === 3 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-primary">
                   ⚠️ Once launched, campaign details cannot be changed. Please review carefully.
                 </div>
