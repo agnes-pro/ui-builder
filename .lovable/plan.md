@@ -1,40 +1,54 @@
 
-# Add Framer Motion Hover Animations to CampaignCard
+
+# Staggered Card Entrance Animations
 
 ## Overview
-Replace the current CSS-only hover effects on CampaignCard with framer-motion's `motion` components for richer, more fluid micro-interactions including scale, shadow lift, and image zoom.
+Add staggered entrance animations so campaign cards animate in one-by-one with a cascading effect, creating a polished reveal when the grid loads or filters change.
 
-## Current State
-The card already has CSS hover effects:
-- `hover:-translate-y-1` (lift)
-- `hover:shadow-lg hover:shadow-primary/5` (shadow)
-- `hover:border-primary/30` (border glow)
-- `group-hover:scale-105` on the image (zoom)
-
-These work but feel mechanical. Framer-motion provides spring physics and `whileHover`/`whileTap` for smoother, more natural interactions.
+## Approach
+Use framer-motion's `variants` with `staggerChildren` on the grid container, and per-card entrance variants on each `CampaignCard`. Cards will fade in and slide up sequentially with a 0.08s stagger delay between each.
 
 ## Changes
 
-### File: `src/components/CampaignCard.tsx`
+### 1. `src/components/CampaignCard.tsx`
+- Accept an optional `index` prop (number) for custom delay support
+- Add `variants` for initial/animate states: `{ opacity: 0, y: 20 }` to `{ opacity: 1, y: 0 }`
+- The `MotionLink` already supports motion props -- add `variants` and `initial`/`animate` props
+- Respect `prefersReducedMotion` by skipping the entrance animation
 
-**What changes:**
-1. Import `motion` from `framer-motion`
-2. Replace the outer `<Link>` with a `motion(Link)` wrapper (or wrap Link content in `motion.div`)
-3. Add `whileHover` animation: `{ y: -6, scale: 1.02 }` with spring transition
-4. Add `whileTap` animation: `{ scale: 0.98 }` for click feedback
-5. Add animated box shadow on hover via framer-motion's `boxShadow` property
-6. Replace the CSS `group-hover:scale-105` on the image with a framer-motion approach using the `group` hover state
-7. Remove redundant CSS hover classes (`hover:-translate-y-1`, `hover:shadow-lg`, etc.) since framer-motion handles them
-8. Respect `prefers-reduced-motion` by checking the media query and disabling animations accordingly
+### 2. `src/pages/Campaigns.tsx`
+- Wrap the campaign card grid `div` with `motion.div` using container variants with `staggerChildren: 0.08`
+- Pass `index` to each `CampaignCard`
+- Re-trigger stagger when filters change by keying the container on the filter state
 
-**Technical approach:**
-- Use `motion.create(Link)` to create a motion-compatible Link component
-- Use `whileHover` and `whileTap` props for the card-level animations
-- Use `transition: { type: "spring", stiffness: 300, damping: 20 }` for natural bounce
-- Keep the CSS `transition-colors` for the title color change (simpler to leave as CSS)
-- Keep the image zoom as CSS `group-hover:scale-105` since it depends on the group hover context
+### 3. `src/pages/Index.tsx`
+- Wrap the featured campaigns grid with the same `motion.div` stagger container
+- Pass `index` to each featured `CampaignCard`
 
-### Files to Modify
-1. `src/components/CampaignCard.tsx` -- add framer-motion hover/tap animations
+### 4. `src/pages/Profile.tsx`
+- Wrap the "My Campaigns" and "Backed" grids with `motion.div` stagger containers
 
-### No new files needed
+## Technical Details
+
+**Container variants:**
+```
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } }
+}
+```
+
+**Card variants (inside CampaignCard):**
+```
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+}
+```
+
+### Files to Modify (4)
+1. `src/components/CampaignCard.tsx` -- add entrance variants
+2. `src/pages/Campaigns.tsx` -- stagger container on grid
+3. `src/pages/Index.tsx` -- stagger container on featured grid
+4. `src/pages/Profile.tsx` -- stagger container on campaign grids
+
