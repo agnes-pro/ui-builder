@@ -1,0 +1,130 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Wallet, ChevronDown, LogOut, User, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useWallet } from "@/contexts/WalletContext";
+import { truncateAddress } from "@/data/mockData";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ConnectWalletModal from "@/components/ConnectWalletModal";
+
+const navLinks = [
+  { href: "/campaigns", label: "Campaigns" },
+  { href: "/create", label: "Create" },
+  { href: "/profile", label: "My Profile" },
+];
+
+export default function Navbar() {
+  const { wallet, disconnectWallet } = useWallet();
+  const [connectOpen, setConnectOpen] = useState(false);
+  const location = useLocation();
+
+  return (
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] glass">
+        <div className="container flex h-full items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-orange">
+              <span className="text-lg font-bold text-primary-foreground">₿</span>
+            </div>
+            <span className="font-display text-xl font-bold text-foreground">
+              sBTC<span className="text-primary">Fund</span>
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <div className="hidden items-center gap-1 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary hover:text-foreground ${
+                  location.pathname === link.href
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Wallet / CTA */}
+          <div className="hidden items-center gap-3 md:flex">
+            {wallet.connected && wallet.address ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2 border-border bg-secondary font-mono text-sm">
+                    <div className="h-2 w-2 rounded-full bg-success" />
+                    {truncateAddress(wallet.address)}
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-card border-border">
+                  <DropdownMenuItem className="gap-2 text-muted-foreground">
+                    <Copy className="h-4 w-4" /> Copy Address
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="gap-2 text-muted-foreground">
+                      <User className="h-4 w-4" /> My Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={disconnectWallet} className="gap-2 text-destructive">
+                    <LogOut className="h-4 w-4" /> Disconnect
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button onClick={() => setConnectOpen(true)} className="gap-2 gradient-orange border-0 text-primary-foreground hover:opacity-90">
+                <Wallet className="h-4 w-4" /> Connect Wallet
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile hamburger */}
+          <Sheet>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full border-border bg-background">
+              <div className="flex flex-col gap-6 pt-8">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className="text-lg font-medium text-foreground hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <div className="pt-4">
+                  {wallet.connected ? (
+                    <Button variant="outline" onClick={disconnectWallet} className="w-full gap-2">
+                      <LogOut className="h-4 w-4" /> Disconnect
+                    </Button>
+                  ) : (
+                    <Button onClick={() => setConnectOpen(true)} className="w-full gap-2 gradient-orange border-0 text-primary-foreground">
+                      <Wallet className="h-4 w-4" /> Connect Wallet
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
+
+      <ConnectWalletModal open={connectOpen} onOpenChange={setConnectOpen} />
+    </>
+  );
+}
