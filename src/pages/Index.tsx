@@ -239,7 +239,7 @@ export default function Index() {
 
       {/* Featured Campaigns */}
       <motion.section
-        className="py-24 bg-secondary/30"
+        className="py-16 bg-secondary/30"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -249,14 +249,14 @@ export default function Index() {
           <div className="flex items-end justify-between">
             <div>
               <h2 className="font-display text-3xl font-bold md:text-4xl">Featured Campaigns</h2>
-              <p className="mt-3 text-muted-foreground">Discover projects building on Bitcoin</p>
+              <p className="mt-2 text-muted-foreground">Discover projects building on Bitcoin</p>
             </div>
             <Button asChild variant="ghost" className="hidden gap-2 text-primary md:inline-flex">
               <Link to="/campaigns">View All <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
           <motion.div
-            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -266,7 +266,7 @@ export default function Index() {
               <CampaignCard key={campaign.id} campaign={campaign} />
             ))}
           </motion.div>
-          <div className="mt-8 text-center md:hidden">
+          <div className="mt-6 text-center md:hidden">
             <Button asChild variant="ghost" className="gap-2 text-primary">
               <Link to="/campaigns">View All Campaigns <ArrowRight className="h-4 w-4" /></Link>
             </Button>
