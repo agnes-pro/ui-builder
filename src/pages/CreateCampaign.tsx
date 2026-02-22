@@ -194,10 +194,10 @@ export default function CreateCampaign() {
   return (
     <PageTransition>
     <Layout>
-      <div className="container max-w-2xl py-12">
+      <div className="container max-w-2xl py-10">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Create Campaign" }]} />
 
-        <h1 className="font-display text-3xl font-bold">Create Campaign</h1>
+        <h1 className="font-display text-2xl font-bold">Create Campaign</h1>
         <p className="mt-2 text-muted-foreground">Launch your project on Bitcoin</p>
 
         {/* Draft restored banner */}
@@ -211,7 +211,7 @@ export default function CreateCampaign() {
         )}
 
         {/* Step Indicator */}
-        <div className="mt-8 flex items-center gap-2">
+        <div className="mt-6 flex items-center gap-2">
           {steps.map((s, i) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-all ${
@@ -227,11 +227,11 @@ export default function CreateCampaign() {
           ))}
         </div>
 
-        <Card className="mt-8 border-border bg-card">
-          <CardContent className="p-6">
+        <Card className="mt-6 border-border bg-card">
+          <CardContent className="p-5">
             {/* Step 1: Basic Info */}
             {step === 0 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <Label htmlFor="campaign-title" className="text-sm font-medium text-foreground mb-2 block">Campaign Title</Label>
                   <Input
@@ -253,7 +253,7 @@ export default function CreateCampaign() {
                     placeholder="Describe your project, goals, and how funds will be used..."
                     value={description}
                     onChange={(e) => { setDescription(e.target.value); setErrors((er) => ({ ...er, description: "" })); }}
-                    rows={6}
+                    rows={4}
                     className={`flex w-full rounded-md border bg-secondary px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.description ? "border-destructive" : "border-border"}`}
                     aria-invalid={!!errors.description}
                   />
@@ -273,7 +273,7 @@ export default function CreateCampaign() {
                   />
                   {imagePreview ? (
                     <div className="relative rounded-xl overflow-hidden border border-border">
-                      <img src={imagePreview} alt="Banner preview" className="h-40 w-full object-cover" />
+                      <img src={imagePreview} alt="Banner preview" className="h-32 w-full object-cover" />
                       <button
                         onClick={removeImage}
                         className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 text-muted-foreground backdrop-blur-sm hover:text-destructive transition-colors"
@@ -287,7 +287,7 @@ export default function CreateCampaign() {
                       onClick={() => fileInputRef.current?.click()}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={handleDrop}
-                      className="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors"
+                      className="flex h-32 items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/50 cursor-pointer hover:border-primary/30 transition-colors"
                     >
                       <div className="text-center text-muted-foreground">
                         <ImagePlus className="mx-auto h-8 w-8 mb-2" />
@@ -315,7 +315,7 @@ export default function CreateCampaign() {
 
             {/* Step 2: Funding Goal */}
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <Label htmlFor="funding-goal" className="text-sm font-medium text-foreground mb-2 block">Funding Goal</Label>
                   <div className="relative">
@@ -357,7 +357,7 @@ export default function CreateCampaign() {
 
             {/* Step 3: Milestones */}
             {step === 2 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-foreground">Define Milestones</p>
@@ -431,7 +431,7 @@ export default function CreateCampaign() {
 
             {/* Step 4: Review */}
             {step === 3 && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-primary">
                   ⚠️ Once launched, campaign details cannot be changed. Please review carefully.
                 </div>
@@ -480,7 +480,7 @@ export default function CreateCampaign() {
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between pt-8">
+            <div className="flex justify-between pt-6">
               <Button
                 variant="outline"
                 onClick={() => setStep(step - 1)}

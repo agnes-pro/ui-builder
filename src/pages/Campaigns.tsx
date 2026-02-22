@@ -102,7 +102,7 @@ export default function Campaigns() {
         title="Campaigns | sBTCFund"
         description="Explore and fund projects building on Bitcoin. Browse active campaigns on sBTCFund."
       />
-      <div className="container py-8">
+      <div className="container py-10">
         <PageHeader
           breadcrumbs={[{ label: "Home", href: "/" }, { label: "Campaigns" }]}
           title="Campaigns"
@@ -186,7 +186,7 @@ export default function Campaigns() {
         </div>
         {/* Results */}
         {isLoading ? (
-          <div className={`mt-6 grid gap-5 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
+          <div className={`mt-6 grid gap-4 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
             {Array.from({ length: 6 }).map((_, i) => (
               <CampaignCardSkeleton key={i} />
             ))}
@@ -209,7 +209,7 @@ export default function Campaigns() {
           <>
             <motion.div
               key={`${debouncedSearch}-${statusFilter}-${sortBy}-${categoryFilter.join()}`}
-              className={`mt-6 grid gap-5 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+              className={`mt-6 grid gap-4 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
               variants={containerVariants}
               initial="hidden"
               animate="visible"

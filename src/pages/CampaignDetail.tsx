@@ -109,12 +109,12 @@ export default function CampaignDetail() {
       />
 
       {/* Banner */}
-      <div className="relative h-64 w-full overflow-hidden md:h-80">
+      <div className="relative h-48 w-full overflow-hidden md:h-64">
         <ImageWithFallback src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" fallbackClassName="h-full w-full" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
 
-      <div className="container relative -mt-20 pb-20">
+      <div className="container relative -mt-16 pb-14">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Campaigns", href: "/campaigns" }, { label: campaign.title }]} />
 
         <Button asChild variant="ghost" size="sm" className="mb-4 gap-1 text-muted-foreground">
@@ -131,7 +131,7 @@ export default function CampaignDetail() {
             Created {campaign.createdAt.toLocaleDateString()}
           </span>
         </div>
-        <h1 className="mt-3 font-display text-3xl font-bold md:text-4xl">{campaign.title}</h1>
+        <h1 className="mt-3 font-display text-2xl font-bold md:text-3xl">{campaign.title}</h1>
         <p className="mt-2 font-mono text-sm text-muted-foreground">
           by {truncateAddress(campaign.creator)}
           <button onClick={copyCreatorAddress} className="ml-2 text-primary hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-ring rounded" aria-label="Copy creator address">
@@ -140,12 +140,12 @@ export default function CampaignDetail() {
         </p>
 
         {/* Two-column */}
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_380px]">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
           {/* Left */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             {/* Description */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-4">About this Campaign</h2>
+              <h2 className="font-display text-lg font-semibold mb-4">About this Campaign</h2>
               <div className="prose prose-invert max-w-none text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {campaign.description}
               </div>
@@ -153,8 +153,8 @@ export default function CampaignDetail() {
 
             {/* About the Creator */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-4">About the Creator</h2>
-              <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">
+              <h2 className="font-display text-lg font-semibold mb-4">About the Creator</h2>
+              <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 font-display font-bold text-primary">
                   {creatorInitials}
                 </div>
@@ -173,10 +173,10 @@ export default function CampaignDetail() {
 
             {/* Milestones */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-6">Milestones</h2>
+              <h2 className="font-display text-lg font-semibold mb-4">Milestones</h2>
               <div className="space-y-4">
                 {campaign.milestones.map((milestone, i) => (
-                  <div key={milestone.id} className={`rounded-xl border p-5 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
+                  <div key={milestone.id} className={`rounded-xl border p-4 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
                     <div className="flex items-start gap-4">
                       <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${milestone.completed ? "bg-success text-success-foreground" : "border-2 border-muted-foreground/30 text-muted-foreground"}`}>
                         {milestone.completed ? <Check className="h-4 w-4 text-background" /> : <span className="text-xs font-semibold">{i + 1}</span>}
@@ -199,12 +199,12 @@ export default function CampaignDetail() {
             {/* Campaign Updates */}
             {updates.length > 0 && (
               <section>
-                <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-primary" /> Updates
                 </h2>
                 <div className="space-y-4">
                   {updates.map((update) => (
-                    <div key={update.id} className="rounded-xl border border-border bg-card p-5">
+                    <div key={update.id} className="rounded-xl border border-border bg-card p-4">
                       <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                         <Calendar className="h-3 w-3" />
                         {update.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
@@ -220,7 +220,7 @@ export default function CampaignDetail() {
             {/* Recent Backers */}
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display text-xl font-semibold">Recent Backers</h2>
+                <h2 className="font-display text-lg font-semibold">Recent Backers</h2>
                 {contributions.length > 0 && (
                   <button onClick={() => setBackersOpen(true)} className="text-xs text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring rounded">
                     View All
@@ -246,17 +246,17 @@ export default function CampaignDetail() {
           </div>
 
           {/* Right sidebar */}
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
             {/* Funding Card */}
             <Card className="border-border bg-card">
-              <CardContent className="space-y-6 p-6">
+              <CardContent className="space-y-5 p-5">
                 <div>
                   <div className="flex items-baseline justify-between">
-                    <span className="font-display text-3xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
+                    <span className="font-display text-2xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
                     <span className="text-sm text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
                   </div>
                   <div
-                    className="mt-3 h-3 w-full overflow-hidden rounded-full bg-secondary"
+                    className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary"
                     role="progressbar"
                     aria-valuenow={progress}
                     aria-valuemin={0}
@@ -269,13 +269,13 @@ export default function CampaignDetail() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-lg bg-secondary p-3 text-center">
-                    <Users className="mx-auto h-5 w-5 text-muted-foreground" />
+                  <div className="rounded-lg bg-secondary p-2.5 text-center">
+                    <Users className="mx-auto h-4 w-4 text-muted-foreground" />
                     <p className="mt-1 font-semibold text-foreground">{campaign.backerCount}</p>
                     <p className="text-xs text-muted-foreground">Backers</p>
                   </div>
-                  <div className="rounded-lg bg-secondary p-3 text-center">
-                    <Clock className="mx-auto h-5 w-5 text-muted-foreground" />
+                  <div className="rounded-lg bg-secondary p-2.5 text-center">
+                    <Clock className="mx-auto h-4 w-4 text-muted-foreground" />
                     <p className="mt-1 font-semibold text-foreground">{daysLeft}</p>
                     <p className="text-xs text-muted-foreground">Days Left</p>
                   </div>
@@ -284,7 +284,7 @@ export default function CampaignDetail() {
                 {campaign.status === "active" && (
                   <Button
                     onClick={() => setContributeOpen(true)}
-                    className="w-full h-12 text-base gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
+                    className="w-full h-10 text-sm gradient-orange border-0 text-primary-foreground hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform"
                   >
                     Contribute STX
                   </Button>

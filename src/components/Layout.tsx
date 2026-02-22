@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background">
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Navbar scrolled={scrolled} />
-      <main role="main" id="main-content" className="pt-[72px]">{children}</main>
+      <main role="main" id="main-content" className="pt-16">{children}</main>
       <ScrollToTop />
     </div>
   );

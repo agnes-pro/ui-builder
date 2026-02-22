@@ -80,7 +80,7 @@ export default function Profile() {
     <PageTransition>
     <Layout>
       <SEOHead title="My Profile | sBTCFund" description="View your sBTCFund profile, campaigns, and contributions." />
-      <div className="container py-12">
+      <div className="container py-10">
         <PageHeader
           breadcrumbs={[{ label: "Home", href: "/" }, { label: "My Profile" }]}
           title={truncateAddress(wallet.address!)}
@@ -88,7 +88,7 @@ export default function Profile() {
 
         {/* Profile Header */}
         <div className="mt-6 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
-          <Identicon address={wallet.address!} size={64} className="rounded-2xl" />
+          <Identicon address={wallet.address!} size={48} className="rounded-2xl" />
           <div className="text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
               <Badge variant="outline" className="border-border font-mono text-xs">Testnet</Badge>
@@ -99,14 +99,14 @@ export default function Profile() {
                 <ExternalLink className="h-3 w-3" /> Explorer
               </a>
             </div>
-            <p className="mt-3 font-mono text-lg font-semibold text-foreground">
+            <p className="mt-3 font-mono text-base font-semibold text-foreground">
               {formatSTX(wallet.balance)} <span className="text-muted-foreground text-sm font-normal">STX</span>
             </p>
           </div>
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="campaigns" className="mt-10">
+        <Tabs defaultValue="campaigns" className="mt-8">
           <TabsList className="bg-secondary border border-border">
             <TabsTrigger value="campaigns">My Campaigns</TabsTrigger>
             <TabsTrigger value="contributions">My Contributions</TabsTrigger>
@@ -124,7 +124,7 @@ export default function Profile() {
               />
             ) : (
               <motion.div
-                className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -148,7 +148,7 @@ export default function Profile() {
                 {myContributions.map((c) => {
                   const campaign = mockCampaigns.find((camp) => camp.id === c.campaignId);
                   return (
-                    <div key={c.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
+                    <div key={c.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-3.5 transition-colors hover:bg-secondary/50">
                       <div>
                         <p className="font-semibold text-foreground">{campaign?.title || "Unknown"}</p>
                         <p className="text-xs text-muted-foreground">{c.timestamp.toLocaleDateString()}</p>
@@ -166,8 +166,8 @@ export default function Profile() {
               {mockActivities.map((activity) => {
                 const Icon = activityIcons[activity.type] || Coins;
                 return (
-                  <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-secondary/50">
-                    <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                    <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-border bg-card p-3.5 transition-colors hover:bg-secondary/50">
+                    <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
                       activity.type === "contributed" ? "bg-primary/10 text-primary" :
                       activity.type === "created" ? "bg-success/10 text-success" :
                       activity.type === "milestone" ? "bg-cyan/10 text-cyan" :
