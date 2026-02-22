@@ -204,7 +204,7 @@ export default function CampaignDetail() {
                 </h2>
                 <div className="space-y-4">
                   {updates.map((update) => (
-                    <div key={update.id} className="rounded-xl border border-border bg-card p-5">
+                    <div key={update.id} className="rounded-xl border border-border bg-card p-4">
                       <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                         <Calendar className="h-3 w-3" />
                         {update.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
