@@ -109,7 +109,7 @@ export default function CampaignDetail() {
       />
 
       {/* Banner */}
-      <div className="relative h-64 w-full overflow-hidden md:h-80">
+      <div className="relative h-48 w-full overflow-hidden md:h-64">
         <ImageWithFallback src={campaign.imageUrl} alt={campaign.title} className="h-full w-full object-cover" fallbackClassName="h-full w-full" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
