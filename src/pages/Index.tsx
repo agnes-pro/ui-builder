@@ -283,7 +283,7 @@ export default function Index() {
         viewport={{ once: true, amount: 0.2 }}
       >
         <div className="container">
-          <h2 className="text-center font-display text-3xl font-bold md:text-4xl">
+          <h2 className="text-center font-display text-2xl font-bold md:text-3xl">
             Built on <span className="text-gradient-orange">Bitcoin</span> Security
           </h2>
           <motion.div
