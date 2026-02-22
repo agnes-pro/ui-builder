@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
@@ -97,6 +97,11 @@ const footerLinks = [
 
 export default function Index() {
   const featured = mockCampaigns.filter((c) => c.status === "active" || c.status === "funded").slice(0, 6);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
   useEffect(() => {
     document.title = "sBTCFund — Decentralized Crowdfunding on Bitcoin";
@@ -106,8 +111,11 @@ export default function Index() {
     <PageTransition>
     <Layout>
       {/* Hero */}
-      <section className="relative min-h-[90vh] flex items-center mesh-gradient gradient-hero">
-        <div className="container relative z-10 py-20">
+      <section ref={heroRef} className="relative min-h-[90vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
+        <motion.div
+          className="container relative z-10 py-20"
+          style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
+        >
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight md:text-7xl">
               Fund the Future of{" "}
@@ -139,7 +147,7 @@ export default function Index() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* How It Works */}
