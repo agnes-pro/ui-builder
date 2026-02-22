@@ -11,6 +11,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import TransactionStatusModal, { TransactionStatus } from "@/components/TransactionStatusModal";
 import { useWallet } from "@/contexts/WalletContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import PageTransition from "@/components/PageTransition";
 
 const steps = ["Basic Info", "Funding Goal", "Milestones", "Review"];
 
