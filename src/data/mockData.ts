@@ -38,6 +38,7 @@ export const mockCampaigns: Campaign[] = [
     createdAt: new Date("2025-10-15"),
     endsAt: new Date("2026-01-15"),
     imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop",
+    category: "defi",
   },
   {
     id: 3,
