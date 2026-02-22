@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Copy, ExternalLink, Wallet, Coins, Rocket, CheckCircle, RefreshCw } from "lucide-react";
 import ConnectWalletModal from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
+import PageTransition from "@/components/PageTransition";
 
 const activityIcons: Record<string, React.ElementType> = {
   created: Rocket,
