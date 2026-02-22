@@ -209,7 +209,7 @@ export default function Campaigns() {
           <>
             <motion.div
               key={`${debouncedSearch}-${statusFilter}-${sortBy}-${categoryFilter.join()}`}
-              className={`mt-8 grid gap-6 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+              className={`mt-6 grid gap-5 ${viewMode === "grid" ? "sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
               variants={containerVariants}
               initial="hidden"
               animate="visible"
