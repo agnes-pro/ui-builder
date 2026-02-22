@@ -72,7 +72,7 @@ export default function Profile() {
 
   return (
     <Layout>
-      <div className="container py-12 animate-fade-in-up">
+      <div className="container py-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "My Profile" }]} />
 
         {/* Profile Header */}
