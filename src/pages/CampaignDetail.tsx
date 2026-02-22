@@ -256,7 +256,7 @@ export default function CampaignDetail() {
                     <span className="text-sm text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
                   </div>
                   <div
-                    className="mt-3 h-3 w-full overflow-hidden rounded-full bg-secondary"
+                    className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary"
                     role="progressbar"
                     aria-valuenow={progress}
                     aria-valuemin={0}
