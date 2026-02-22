@@ -153,8 +153,8 @@ export default function CampaignDetail() {
 
             {/* About the Creator */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-4">About the Creator</h2>
-              <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">
+              <h2 className="font-display text-lg font-semibold mb-4">About the Creator</h2>
+              <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 font-display font-bold text-primary">
                   {creatorInitials}
                 </div>
