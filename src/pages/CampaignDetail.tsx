@@ -173,7 +173,7 @@ export default function CampaignDetail() {
 
             {/* Milestones */}
             <section>
-              <h2 className="font-display text-xl font-semibold mb-6">Milestones</h2>
+              <h2 className="font-display text-lg font-semibold mb-4">Milestones</h2>
               <div className="space-y-4">
                 {campaign.milestones.map((milestone, i) => (
                   <div key={milestone.id} className={`rounded-xl border p-5 transition-all duration-300 ${milestone.completed ? "border-success/30 bg-success/5" : "border-border bg-card"}`}>
