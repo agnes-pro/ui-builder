@@ -6,9 +6,10 @@ import PageTransition from "@/components/PageTransition";
 
 const NotFound = () => {
   return (
+    <PageTransition>
     <Layout>
       <div className="container flex min-h-[70vh] flex-col items-center justify-center py-20 text-center">
-        <div className="animate-fade-in-up">
+        <div>
           <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-primary/10">
             <span className="font-display text-5xl font-bold text-primary">404</span>
           </div>
