@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Campaign } from "@/types/campaign";
 import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
 import { getProgressColor } from "@/lib/utils";
+import { categoryColors, CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Share2, Users } from "lucide-react";
 import ImageWithFallback from "@/components/ImageWithFallback";
