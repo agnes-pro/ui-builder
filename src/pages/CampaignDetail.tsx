@@ -252,7 +252,7 @@ export default function CampaignDetail() {
               <CardContent className="space-y-5 p-5">
                 <div>
                   <div className="flex items-baseline justify-between">
-                    <span className="font-display text-3xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
+                    <span className="font-display text-2xl font-bold text-foreground">{formatSTX(campaign.raisedAmount)}</span>
                     <span className="text-sm text-muted-foreground">of {formatSTX(campaign.goalAmount)} STX</span>
                   </div>
                   <div
