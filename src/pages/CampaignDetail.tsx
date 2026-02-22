@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { categoryColors, CAMPAIGN_CATEGORIES } from "@/lib/categoryColors";
-import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage } from "@/data/mockData";
+import { truncateAddress, formatSTX, getDaysLeft, getProgressPercentage, mockCampaigns, mockContributions } from "@/data/mockData";
 import { getProgressColor } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
