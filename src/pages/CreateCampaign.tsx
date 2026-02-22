@@ -116,7 +116,7 @@ export default function CreateCampaign() {
 
   const canNext = () => {
     switch (step) {
-      case 0: return title.length > 0 && description.length > 0;
+      case 0: return title.length > 0 && description.length > 0 && category !== "";
       case 1: return Number(goal) > 0;
       case 2: return totalPercentage === 100 && milestones.every((m) => m.description.length > 0);
       default: return true;
