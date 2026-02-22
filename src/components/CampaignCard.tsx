@@ -55,13 +55,12 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
         prefersReducedMotion
           ? undefined
           : {
-              y: -6,
-              scale: 1.02,
-              boxShadow: "0 20px 40px -12px hsl(var(--primary) / 0.15)",
+              y: -3,
+              boxShadow: "0 8px 24px -8px hsl(var(--primary) / 0.1)",
             }
       }
-      whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
       {/* Image */}
       <div className="relative aspect-video overflow-hidden">
