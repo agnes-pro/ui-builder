@@ -147,14 +147,14 @@ export default function Index() {
       />
 
       {/* Hero */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[85vh] flex items-center mesh-gradient gradient-hero overflow-hidden">
         <FloatingParticles />
         <motion.div
-          className="container relative z-10 py-20"
+          className="container relative z-10 py-16"
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <div className="animate-fade-in-up mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
+            <div className="animate-fade-in-up mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
               <Zap className="h-3 w-3 text-primary" />
               Powered by Stacks + Bitcoin
             </div>
@@ -163,10 +163,10 @@ export default function Index() {
               Fund the Future of{" "}
               <span className="text-gradient-orange">Bitcoin</span>
             </h1>
-            <p className="mt-6 animate-fade-in-up text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "0.15s" }}>
+            <p className="mt-4 animate-fade-in-up text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "0.15s" }}>
               Decentralized crowdfunding powered by Stacks. Create campaigns with milestone-based fund releases, contribute STX, and build the Bitcoin ecosystem together.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
               <Button asChild size="lg" className="h-12 gap-2 gradient-orange border-0 text-primary-foreground text-base hover:opacity-90 animate-pulse-glow active:scale-[0.98] transition-transform">
                 <Link to="/campaigns">
                   Explore Campaigns <ArrowRight className="h-4 w-4" />
@@ -178,7 +178,7 @@ export default function Index() {
             </div>
 
             {/* Stats */}
-            <div className="mt-16 grid grid-cols-3 gap-8 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
+            <div className="mt-12 grid grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="font-display text-3xl font-bold text-foreground md:text-4xl">
@@ -192,7 +192,7 @@ export default function Index() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
