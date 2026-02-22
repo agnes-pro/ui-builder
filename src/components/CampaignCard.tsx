@@ -67,7 +67,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
         <ImageWithFallback
           src={campaign.imageUrl}
           alt={campaign.title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           fallbackClassName="h-full w-full"
           loading="lazy"
         />
