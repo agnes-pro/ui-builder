@@ -48,7 +48,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
   return (
     <MotionLink
       to={`/campaign/${campaign.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:border-primary/20"
       aria-label={`Campaign: ${campaign.title}, ${progress}% funded`}
       variants={cardVariants}
       whileHover={
