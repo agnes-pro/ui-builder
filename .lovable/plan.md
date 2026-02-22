@@ -1,50 +1,34 @@
 
 
-# Scale Down the Overall UI — Make Everything More Compact
+# Fix Mobile Responsive Layout Issues
 
-## Overview
-The entire homepage feels oversized — the hero takes up too much vertical space, section headings are too large, padding between sections is excessive, and cards have too much whitespace. This plan reduces sizes across the board for a tighter, more professional feel.
+## Problem
+On mobile (375px), the "How It Works" and "Featured Campaigns" sections are invisible. They render but stay at `opacity: 0` because framer-motion's `whileInView` animations never trigger. The `viewport={{ amount: 0.2 }}` threshold requires 20% of the section to be visible simultaneously, which is hard to achieve on small screens with tall sections (especially the 6-card campaign grid).
+
+Additionally, the hero section is still quite tall on mobile (`min-h-[80vh]`), pushing content further down.
 
 ## Changes
 
-### 1. Hero Section (src/pages/Index.tsx)
-- Reduce hero height from `min-h-[85vh]` to `min-h-[70vh]`
-- Reduce h1 from `text-5xl md:text-7xl` to `text-4xl md:text-5xl`
-- Reduce description from `text-lg md:text-xl` to `text-base md:text-lg`
-- Reduce buttons from `h-12 text-base` to `h-10 text-sm`
-- Reduce stats from `text-3xl md:text-4xl` to `text-2xl md:text-3xl`
-- Reduce stats margin from `mt-12` to `mt-8`
-- Reduce button margin from `mt-8` to `mt-6`
+### 1. Fix whileInView thresholds (src/pages/Index.tsx)
+- Reduce `amount` from `0.2` to `0.05` (or `"some"`) on all section-level `motion.section` elements
+- This ensures animations trigger reliably on small viewports
+- Affected: "How It Works" section (line 153), Featured Campaigns (line 195), Trust Indicators (line 232)
+- Also fix the inner `motion.div` stagger containers (lines 165, 212, 246)
 
-### 2. Section Spacing (src/pages/Index.tsx)
-- Reduce all section padding from `py-16` to `py-12`
-- Reduce inner gaps from `mt-10` to `mt-8`
+### 2. Reduce hero height on mobile (src/pages/Index.tsx)
+- Change `min-h-[80vh]` to `min-h-[60vh] sm:min-h-[70vh]` so the hero doesn't dominate on mobile
 
-### 3. Section Headings (src/pages/Index.tsx)
-- Reduce all h2 from `text-3xl md:text-4xl` to `text-2xl md:text-3xl`
+### 3. Limit Featured Campaigns on mobile (src/pages/Index.tsx)
+- Currently shows 6 cards in a single column on mobile, making the section very tall
+- Show only 3 cards on mobile using a responsive slice or CSS `hidden` classes on the last 3
 
-### 4. How It Works Cards (src/pages/Index.tsx)
-- Reduce icon container from `h-14 w-14` to `h-12 w-12`
-- Reduce icon from `h-7 w-7` to `h-6 w-6`
-- Reduce title from `text-xl` to `text-lg`
-- Reduce card padding from `p-6` to `p-5`
-
-### 5. Trust Indicator Cards (src/pages/Index.tsx)
-- Already reasonably sized, minor reduction in icon container from `h-11 w-11` to `h-10 w-10`
-
-### 6. Campaign Cards (src/components/CampaignCard.tsx)
-- Reduce title from `text-lg` to `text-base`
-- Reduce card content padding from `p-4` to `p-3.5`
-
-### 7. Footer (src/components/Footer.tsx)
-- Reduce footer padding from `py-8` to `py-6`
-- Reduce grid gap from `gap-8` to `gap-6`
+### 4. Trust indicators mobile grid (src/pages/Index.tsx)
+- Currently `sm:grid-cols-2 lg:grid-cols-4` which means single column on mobile (4 stacked cards)
+- Change to `grid-cols-2 lg:grid-cols-4` so they show as a 2x2 grid even on mobile
 
 ## Files Modified
-- `src/pages/Index.tsx` — hero sizing, section spacing, heading sizes, card sizes
-- `src/components/CampaignCard.tsx` — card title and padding
-- `src/components/Footer.tsx` — footer padding
+- `src/pages/Index.tsx` — viewport thresholds, hero height, campaign card limit, trust grid
 
-## Impact
-All changes are CSS class adjustments only. No structural or functional changes. The layout stays identical, just scaled down to feel more modern and information-dense.
+## Technical Details
+The root cause is framer-motion's `viewport.amount` property. When set to `0.2`, the element must have 20% of its total height visible in the viewport. A section with 6 campaign cards stacked vertically can be 2000px+ tall on mobile, requiring 400px visible at once while the viewport is only 812px. The animation technically fires, but the tall hidden-content sections get skipped during fast scroll. Setting `amount` to `0.05` or `"some"` fixes this reliably.
 
