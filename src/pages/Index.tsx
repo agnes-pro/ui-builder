@@ -99,7 +99,7 @@ export default function Index() {
       />
 
       {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center gradient-hero overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[90vh] flex items-center gradient-hero overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-40" />
         <div className="absolute inset-0 mesh-gradient" />
         {/* Animated gradient orb */}
