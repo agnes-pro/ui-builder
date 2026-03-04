@@ -56,6 +56,14 @@ function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string })
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
+function SectionSeparator() {
+  return (
+    <div className="flex justify-center">
+      <div className="h-px w-24 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+    </div>
+  );
+}
+
 const stats = [
   { label: "Total Raised", value: 211200, suffix: " STX" },
   { label: "Campaigns", value: 48, suffix: "" },
@@ -92,22 +100,26 @@ export default function Index() {
 
       {/* ─── Hero ─── */}
       <section ref={heroRef} className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center gradient-hero overflow-hidden">
-        {/* Grid pattern */}
         <div className="absolute inset-0 grid-pattern opacity-40" />
-        {/* Mesh gradient blobs */}
         <div className="absolute inset-0 mesh-gradient" />
-        {/* Subtle radial glow behind hero text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-primary/[0.04] blur-[100px] pointer-events-none" />
+        {/* Animated gradient orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/[0.06] blur-[120px] pointer-events-none animate-float" />
+        <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] rounded-full bg-cosmic/[0.04] blur-[100px] pointer-events-none animate-float" style={{ animationDelay: "1.5s" }} />
 
         <motion.div
           className="container relative z-10 py-12"
           style={{ y: heroY, opacity: heroOpacity }}
         >
           <div className="mx-auto max-w-2xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-white/50 backdrop-blur-sm">
-              <Zap className="h-3 w-3 text-primary" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-xs font-medium text-white/60 backdrop-blur-sm animate-pulse-glow"
+            >
+              <Zap className="h-3.5 w-3.5 text-primary" />
               Powered by Stacks + Bitcoin
-            </div>
+            </motion.div>
 
             <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl">
               Fund the Future of{" "}
@@ -144,9 +156,11 @@ export default function Index() {
         </motion.div>
       </section>
 
+      <SectionSeparator />
+
       {/* ─── How It Works ─── */}
       <motion.section
-        className="py-14 bg-background"
+        className="py-16 bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -158,33 +172,47 @@ export default function Index() {
             <h2 className="mt-1 font-display text-2xl font-bold">Three simple steps</h2>
           </div>
           <motion.div
-            className="mt-8 grid gap-4 sm:grid-cols-3"
+            className="mt-10 relative"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.05 }}
           >
-            {howItWorks.map((step) => (
-              <motion.div
-                key={step.title}
-                variants={childVariants}
-                className="group relative rounded-xl border border-border bg-card p-5 transition-all duration-200 hover:border-primary/20 hover:shadow-sm"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <step.icon className="h-4 w-4 text-primary" />
+            {/* Desktop connector line */}
+            <div className="hidden sm:block absolute top-[3.25rem] left-[16.666%] right-[16.666%] h-px border-t-2 border-dashed border-primary/20 z-0" />
+
+            <div className="grid gap-8 sm:grid-cols-3 sm:gap-6 relative z-10">
+              {howItWorks.map((step, i) => (
+                <motion.div
+                  key={step.title}
+                  variants={childVariants}
+                  className="group flex flex-col items-center text-center relative"
+                >
+                  {/* Mobile connector line (vertical) */}
+                  {i < howItWorks.length - 1 && (
+                    <div className="sm:hidden absolute top-[4.5rem] left-1/2 -translate-x-1/2 h-8 border-l-2 border-dashed border-primary/20 z-0" />
+                  )}
+
+                  {/* Step number badge */}
+                  <div className="relative mb-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl gradient-orange shadow-lg transition-all duration-300 group-hover:glow-orange group-hover:scale-105">
+                      <step.icon className="h-5 w-5 text-primary-foreground" />
+                    </div>
+                    <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-background border-2 border-primary text-[10px] font-bold text-primary font-mono">
+                      {step.step}
+                    </span>
                   </div>
-                  <div>
-                    <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{step.step}</span>
-                    <h3 className="font-display text-sm font-semibold">{step.title}</h3>
-                    <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{step.description}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+
+                  <h3 className="font-display text-base font-semibold">{step.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground max-w-[220px]">{step.description}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </motion.section>
+
+      <SectionSeparator />
 
       {/* ─── Featured Campaigns ─── */}
       <motion.section
@@ -225,6 +253,8 @@ export default function Index() {
         </div>
       </motion.section>
 
+      <SectionSeparator />
+
       {/* ─── Trust Indicators ─── */}
       <motion.section
         className="py-14 bg-background"
@@ -251,16 +281,46 @@ export default function Index() {
               <motion.div
                 key={item.title}
                 variants={childVariants}
-                className="rounded-xl border border-border bg-card p-4 text-center transition-all duration-200 hover:border-primary/20 hover:shadow-sm"
+                className="group rounded-xl border border-border bg-card p-4 text-center transition-all duration-300 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
               >
-                <div className="mx-auto mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                  <item.icon className="h-4 w-4 text-primary" />
+                <div className="mx-auto mb-2.5 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105">
+                  <item.icon className="h-5 w-5 text-primary" />
                 </div>
                 <h3 className="font-display text-sm font-semibold">{item.title}</h3>
                 <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">{item.description}</p>
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </motion.section>
+
+      {/* ─── CTA Banner ─── */}
+      <motion.section
+        className="gradient-hero relative overflow-hidden"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="absolute inset-0 grid-pattern opacity-30" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] rounded-full bg-primary/[0.06] blur-[80px] pointer-events-none" />
+        <div className="container relative z-10 py-16 text-center">
+          <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
+            Ready to build on <span className="text-gradient-orange">Bitcoin</span>?
+          </h2>
+          <p className="mt-3 text-sm text-white/50 max-w-md mx-auto">
+            Launch your decentralized campaign today. Transparent, milestone-based funding powered by smart contracts.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Button asChild size="sm" className="h-9 gap-2 gradient-orange border-0 text-primary-foreground text-sm font-medium hover:opacity-90 active:scale-[0.98] transition-all">
+              <Link to="/create">
+                Start a Campaign <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="h-9 border-white/15 bg-white/[0.04] text-white/80 text-sm font-medium hover:bg-white/[0.08] hover:text-white active:scale-[0.98] transition-all">
+              <Link to="/campaigns">Browse Projects</Link>
+            </Button>
+          </div>
         </div>
       </motion.section>
 
