@@ -71,22 +71,27 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
           fallbackClassName="h-full w-full"
           loading="lazy"
         />
+        {/* Gradient overlay that intensifies on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="absolute top-3 left-3 flex gap-1.5">
-          <Badge className={`${statusColors[campaign.status]} border text-xs capitalize`}>
+          <Badge className={`${statusColors[campaign.status]} border text-xs capitalize transition-shadow duration-300 group-hover:shadow-[0_0_8px_-2px_currentColor]`}>
             {campaign.status}
           </Badge>
-          <Badge className={`${categoryColors[campaign.category]} border text-xs`}>
+          <Badge className={`${categoryColors[campaign.category]} border text-xs transition-shadow duration-300 group-hover:shadow-[0_0_8px_-2px_currentColor]`}>
             {CAMPAIGN_CATEGORIES.find(c => c.value === campaign.category)?.label}
           </Badge>
         </div>
-        {/* Share button on hover */}
-        <button
+        {/* Share button with spring animation */}
+        <motion.button
           onClick={handleShare}
           className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg bg-background/80 text-muted-foreground opacity-0 backdrop-blur-sm transition-all duration-200 hover:text-primary group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="Share campaign"
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.1 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
         >
           <Share2 className="h-3.5 w-3.5" />
-        </button>
+        </motion.button>
       </div>
 
       {/* Content */}
@@ -102,7 +107,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
         {/* Progress */}
         <div className="mt-auto space-y-2">
           <div
-            className="h-1.5 w-full overflow-hidden rounded-full bg-secondary"
+            className="h-1.5 w-full overflow-hidden rounded-full bg-secondary transition-all duration-300 group-hover:h-2"
             role="progressbar"
             aria-valuenow={progress}
             aria-valuemin={0}
@@ -110,7 +115,7 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
             aria-label={`${progress}% funded`}
           >
             <div
-              className={`h-full rounded-full ${getProgressColor(progress)} transition-all duration-1000 ease-out`}
+              className={`h-full rounded-full ${getProgressColor(progress)} transition-all duration-1000 ease-out group-hover:progress-shimmer`}
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -126,11 +131,11 @@ const CampaignCard = memo(function CampaignCard({ campaign }: { campaign: Campai
 
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Users className="h-3.5 w-3.5" /> {campaign.backerCount} backers
+          <span className="flex items-center gap-1 transition-colors duration-200 group-hover:text-primary">
+            <Users className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" /> {campaign.backerCount} backers
           </span>
-          <span className="flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" /> {daysLeft > 0 ? `${daysLeft} days left` : "Ended"}
+          <span className="flex items-center gap-1 transition-colors duration-200 group-hover:text-primary">
+            <Clock className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" /> {daysLeft > 0 ? `${daysLeft} days left` : "Ended"}
           </span>
         </div>
       </div>
