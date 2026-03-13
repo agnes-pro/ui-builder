@@ -1,22 +1,44 @@
 
 
-## Hero Height Verification Complete
+# Refactor Index.tsx into Landing Page Components
 
-**Desktop (1280px):**
-- 90vh height fills the viewport beautifully with the gradient orbs and animated elements fully visible
-- Hero content (headline, description, CTAs, stats) is well-centered and prominent
-- The scroll distance to "How It Works" feels appropriate — not too short, not overwhelming
+## Plan
 
-**Mobile (375px):**
-- 60vh mobile height keeps the hero compact and accessible
-- All content fits within the viewport without excessive scrolling
-- Stats row is visible without scrolling
+Extract 5 components from the ~330-line Index.tsx into `src/components/landing/`:
 
-**How It Works Section:**
-- Desktop: Horizontal flow with dashed connector line between steps works well
-- Mobile: Vertical stacking with left-side connector line visible
-- Numbered badges (01, 02, 03) are prominent and clear
-- Hover glow effects applied correctly
+| Component | Lines | Contents |
+|-----------|-------|----------|
+| `HeroSection.tsx` | 102-157 | Hero with parallax, gradient orbs, stats, AnimatedCounter |
+| `HowItWorks.tsx` | 161-213 | Steps flow with connectors, data array |
+| `FeaturedCampaigns.tsx` | 217-254 | Campaign grid with featured filter |
+| `TrustIndicators.tsx` | 258-295 | Security cards grid, data array |
+| `CTABanner.tsx` | 297-325 | CTA section |
 
-**Verdict:** The 90vh/60vh split feels right. The desktop hero has cinematic presence while mobile stays practical. No changes needed.
+Shared animation variants (`sectionVariants`, `staggerContainer`, `childVariants`) and `SectionSeparator` move to `src/components/landing/shared.ts`.
+
+**Index.tsx** becomes a thin orchestrator:
+```tsx
+export default function Index() {
+  return (
+    <PageTransition>
+      <Layout>
+        <SEOHead ... />
+        <HeroSection />
+        <SectionSeparator />
+        <HowItWorks />
+        <SectionSeparator />
+        <FeaturedCampaigns />
+        <SectionSeparator />
+        <TrustIndicators />
+        <CTABanner />
+        <Footer />
+      </Layout>
+    </PageTransition>
+  );
+}
+```
+
+## Files
+- **Create**: `src/components/landing/shared.ts`, `HeroSection.tsx`, `HowItWorks.tsx`, `FeaturedCampaigns.tsx`, `TrustIndicators.tsx`, `CTABanner.tsx`
+- **Edit**: `src/pages/Index.tsx` — replace with thin orchestrator
 
